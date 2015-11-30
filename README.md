@@ -7,8 +7,8 @@ The library parses w3g replay files and returns statitics and different KPIs. Th
 ## Requirements.
 The library must accept a w3g file and return human readable Statistics data. 
 Statistics data must represent (but not limited to):
-1. Map information: length of the game, name of the winner.
-2. Player's information for each player: color, race, APM, key bindings.
+* Map information: length of the game, name of the winner.
+* Player's information for each player: color, race, APM, key bindings.
 
 
 
