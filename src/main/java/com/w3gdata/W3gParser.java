@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.zip.DataFormatException;
 
 public class W3gParser {
 
@@ -20,7 +21,7 @@ public class W3gParser {
         return result;
     }
 
-    public StatisticsData parse(ByteSource replaySource) throws ParseException, IOException {
+    public StatisticsData parse(ByteSource replaySource) throws ParseException, IOException, DataFormatException {
         return new StatisticsByteProcessor().process(replaySource.read());
     }
 
