@@ -10,6 +10,7 @@ public class ReplayInformation {
     public static class Header {
         public int headerVersion;
         public int size;
+        public int firstDataBlockOffset;
 
         @Override
         public String toString() {

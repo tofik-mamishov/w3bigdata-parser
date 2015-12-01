@@ -21,7 +21,7 @@ public class W3gParser {
     }
 
     public StatisticsData parse(ByteSource replaySource) throws ParseException, IOException {
-        return replaySource.read(new StatisticsByteProcessor());
+        return new StatisticsByteProcessor().process(replaySource.read());
     }
 
 

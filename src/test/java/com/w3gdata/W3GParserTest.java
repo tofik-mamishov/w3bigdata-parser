@@ -48,6 +48,7 @@ public class W3GParserTest {
             ReplayInformation.Header expectedHeader = new ReplayInformation.Header();
             expectedHeader.headerVersion = 1;
             expectedHeader.size = (int) replaySourceFile.size();
+            expectedHeader.firstDataBlockOffset = 68;
 
             ReplayInformation.SubHeader expectedSubHeader = new ReplayInformation.SubHeader();
             expectedSubHeader.versionNumber = 26;
