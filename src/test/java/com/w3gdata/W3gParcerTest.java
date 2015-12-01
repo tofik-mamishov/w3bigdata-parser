@@ -1,14 +1,21 @@
 package com.w3gdata;
 
+import com.google.common.base.Joiner;
+import com.google.common.io.ByteProcessor;
+import com.google.common.io.Files;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 
 import static org.junit.Assert.*;
 
 public class W3gParcerTest {
+
+    private static final Logger logger = Logger.getLogger(W3gParcerTest.class);
 
     private static final String REPLY_SOURCE_FILE_NAME = "w3replayTestFile.w3g";
 
@@ -26,18 +33,35 @@ public class W3gParcerTest {
 
     private StatisticsData statisticsData;
 
-    private File replySourceFile;
+    private File replaySourceFile;
 
     @Before
     public void setUp() throws Exception {
-        replySourceFile = new File(getClass().getResource(REPLY_SOURCE_FILE_NAME).toURI());
+        replaySourceFile = new File(getClass().getResource(REPLY_SOURCE_FILE_NAME).toURI());
+    }
+
+    @Test
+    public void playingWithFire() throws IOException {
+        Files.asByteSource(replaySourceFile).read(new ByteProcessor<Long>() {
+            @Override
+            public boolean processBytes(byte[] buf, int off, int len) throws IOException {
+                logger.debug(Joiner.on(" ").join(buf.length, off, len));
+                return off < buf.length;
+            }
+
+            @Override
+            public Long getResult() {
+                return null;
+            }
+        });
+
     }
 
     @Test
     public void testParse() throws Exception {
         W3gParcer w3gParcer = new W3gParcer();
         try {
-            statisticsData = w3gParcer.parse(replySourceFile);
+            statisticsData = w3gParcer.parse(replaySourceFile);
         } catch (ParseException e) {
             fail("Should never happen!");
         }
@@ -72,5 +96,6 @@ public class W3gParcerTest {
     @Test
     public void testReadMatchLength() throws Exception {
         assertEquals(EXPECTED_MATCH_LENGTH, statisticsData.getMatchLength());
+
     }
 }
