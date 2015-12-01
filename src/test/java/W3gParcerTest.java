@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.text.ParseException;
 
 public class W3gParcerTest {
 
@@ -21,6 +22,8 @@ public class W3gParcerTest {
 
     private static final String EXPECTED_MATCH_LENGTH = "00:45:24";
 
+    private StatisticsData statisticsData;
+
     private File replySourceFile;
 
     @Before
@@ -31,12 +34,41 @@ public class W3gParcerTest {
     @Test
     public void testParse() throws Exception {
         W3gParcer w3gParcer = new W3gParcer();
-        StatisticsData statisticsData = w3gParcer.parse(replySourceFile);
+        try {
+            statisticsData = w3gParcer.parse(replySourceFile);
+        } catch (ParseException e) {
+            fail("Should never happen!");
+        }
+        assertNotNull(statisticsData);
+    }
+
+    @Test
+    public void testReadPlayersNumber() throws Exception {
         assertEquals(EXPECTED_PLAYERS_NUMBER, statisticsData.getPlayers().size());
+    }
+
+    @Test
+    public void testReadPlayer1() throws Exception {
         assertEquals(EXPECTED_PLAYER_NAME_1, statisticsData.getPlayers().get(0).getName());
+    }
+
+    @Test
+    public void testReadPlayer2() throws Exception {
         assertEquals(EXPECTED_PLAYER_NAME_2, statisticsData.getPlayers().get(1).getName());
+    }
+
+    @Test
+    public void testReadGameMode() throws Exception {
         assertEquals(EXPECTED_GAME_MODE, statisticsData.getGameMode());
+    }
+
+    @Test
+    public void testReadMap() throws Exception {
         assertEquals(EXPECTED_MAP, statisticsData.getMap());
+    }
+
+    @Test
+    public void testReadMatchLength() throws Exception {
         assertEquals(EXPECTED_MATCH_LENGTH, statisticsData.getMatchLength());
     }
 }
