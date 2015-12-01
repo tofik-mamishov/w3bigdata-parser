@@ -35,14 +35,6 @@ public class StatisticsByteProcessor {
         return data;
     }
 
-    private void debugToFile(byte[] decompressed) {
-        try (FileOutputStream fos = new FileOutputStream("decompressed.bin")) {
-            fos.write(decompressed);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void readPlayerRecord(byte[] buf, int offset) {
         PlayerRecord playerRecord = new PlayerRecord();
         playerRecord.recordId = buf[offset];
@@ -110,6 +102,15 @@ public class StatisticsByteProcessor {
         data.replayInformation.subHeader.timeLength = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
     }
 
+    private void debugToFile(byte[] decompressed) {
+        try (FileOutputStream fos = new FileOutputStream("decompressed.bin")) {
+            fos.write(decompressed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static int readDWord(byte[] buf, int offset) {
         return buf[offset + 3] << 24 | (buf[offset + 2] & 0xFF) << 16 | (buf[offset + 1] & 0xFF) << 8 | (buf[offset] & 0xFF);
     }
@@ -128,7 +129,7 @@ public class StatisticsByteProcessor {
         return i - 1;
     }
 
-    static void CHECK_ERR(ZStream z, int err, String msg) {
+    public static void CHECK_ERR(ZStream z, int err, String msg) {
         if (err != JZlib.Z_OK) {
             if (z.msg != null) logger.error(z.msg + " ");
             logger.error(msg + " error: " + err);
