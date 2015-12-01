@@ -21,13 +21,19 @@ public class W3gParcer {
 
     private static final int HEADER_SIZE_ME_1_07_AND_TFT = 0x44;
 
-    private static final int HEADER_FILE_SIZE_OFFSET = 0x0020;
+    private static final int HEADER_COMPRESSED_FILE_SIZE_OFFSET = 0x0020;
 
     private static final int HEADER_FILE_VERSION_OFFSET = 0x0024;
 
     private static final int HEADER_FILE_VERSION_LE_1_06 = 0x00;
 
     private static final int HEADER_FILE_VERSION_ME_1_07_AND_TFT = 0x01;
+
+    private static final int HEADER_DECOMPRESSED_DATA_SIZE_OFFSET = 0x0028;
+
+    private static final int HEADER_COMPRESSED_DATA_BLOCKS_NUMBER_OFFSET = 0x002c;
+
+    private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
 
     public StatisticsData parse(File replySourceFile) throws ParseException, FileNotFoundException {
         StatisticsData result = new StatisticsData();
