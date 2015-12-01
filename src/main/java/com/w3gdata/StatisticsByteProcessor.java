@@ -1,5 +1,6 @@
 package com.w3gdata;
 
+import com.google.common.primitives.Bytes;
 import com.jcraft.jzlib.Inflater;
 import com.jcraft.jzlib.JZlib;
 import com.jcraft.jzlib.ZStream;
@@ -25,19 +26,12 @@ public class StatisticsByteProcessor {
 
     public StatisticsData process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
-        List<DataBlock> blocks = readDataBlocks(buf);
-        int totalSize = blocks.stream().mapToInt(new ToIntFunction<DataBlock>() {
-            @Override
-            public int applyAsInt(DataBlock value) {
-                return value.decompressed.length;
-            }
-        }).reduce(0, Integer::sum);
-        logger.info("Total decompressed size is: " + totalSize);
+        byte[] decompressedData = inflateDataBlocks(buf);
         return data;
     }
 
-    private List<DataBlock> readDataBlocks(byte[] buf) throws DataFormatException {
-        logger.info("Reading data blocks...");
+    private byte[] inflateDataBlocks(byte[] buf) throws DataFormatException {
+        logger.info("Inflating data blocks...");
         int nextBlockOffset = data.replayInformation.header.firstDataBlockOffset;
         List<DataBlock> blocks = new ArrayList<DataBlock>();
         while (nextBlockOffset + HEADER_SIZE < buf.length) {
@@ -46,7 +40,19 @@ public class StatisticsByteProcessor {
             blocks.add(block);
         }
         logger.info("Read " + blocks.size() + " blocks.");
-        return blocks;
+        int totalSize = blocks.stream().mapToInt(new ToIntFunction<DataBlock>() {
+            @Override
+            public int applyAsInt(DataBlock value) {
+                return value.decompressed.length;
+            }
+        }).reduce(0, Integer::sum);
+        logger.info("Total inflated size is: " + totalSize);
+        //Any suggestions to make it more functional?
+        byte[][] concatenated = new byte[blocks.size()][];
+        for (int i = 0; i < blocks.size(); i++) {
+            concatenated[i] = blocks.get(i).decompressed;
+        }
+        return Bytes.concat(concatenated);
     }
 
     private DataBlock readDataBlock(byte[] buf, int offset) throws DataFormatException {
@@ -97,9 +103,9 @@ public class StatisticsByteProcessor {
 
     static void CHECK_ERR(ZStream z, int err, String msg) {
         if (err != JZlib.Z_OK) {
-            if (z.msg != null) System.out.print(z.msg + " ");
-            System.out.println(msg + " error: " + err);
-            System.exit(1);
+            if (z.msg != null) logger.error(z.msg + " ");
+            logger.error(msg + " error: " + err);
+            throw new ProcessorException(msg + " error: " + err);
         }
     }
 }
