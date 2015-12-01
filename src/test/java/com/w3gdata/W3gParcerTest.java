@@ -1,10 +1,12 @@
-import static org.junit.Assert.*;
+package com.w3gdata;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.text.ParseException;
+
+import static org.junit.Assert.*;
 
 public class W3gParcerTest {
 

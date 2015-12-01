@@ -1,3 +1,5 @@
+package com.w3gdata;
+
 public class Player {
     private String name;
 
