@@ -1,44 +1,28 @@
 package com.w3gdata;
 
+import com.google.common.io.ByteSource;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 
 public class W3gParcer {
-    /**
-     * Header
-     */
-    private static final int HEADER_TITLE_OFFSET = 0x0000;
 
-    private static final String HEADER_TITLE = "Warcraft III recorded game\0x1A\0";
+    private static final Logger logger = Logger.getLogger(W3gParcer.class);
 
-    private static final int HEADER_TITLE_LENGTH = HEADER_TITLE.length();
-
-    private static final int HEADER_SIZE_OFFSET = 0x001c;
-
-    private static final int HEADER_SIZE_LE_1_06 = 0x40;
-
-    private static final int HEADER_SIZE_ME_1_07_AND_TFT = 0x44;
-
-    private static final int HEADER_COMPRESSED_FILE_SIZE_OFFSET = 0x0020;
-
-    private static final int HEADER_FILE_VERSION_OFFSET = 0x0024;
-
-    private static final int HEADER_FILE_VERSION_LE_1_06 = 0x00;
-
-    private static final int HEADER_FILE_VERSION_ME_1_07_AND_TFT = 0x01;
-
-    private static final int HEADER_DECOMPRESSED_DATA_SIZE_OFFSET = 0x0028;
-
-    private static final int HEADER_COMPRESSED_DATA_BLOCKS_NUMBER_OFFSET = 0x002c;
-
-    private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
-
-    public StatisticsData parse(File replySourceFile) throws ParseException, FileNotFoundException {
+    public StatisticsData parse(File replaySourceFile) throws ParseException, FileNotFoundException {
         StatisticsData result = new StatisticsData();
-        FileInputStream fileInputStream = new FileInputStream(replySourceFile);
+        FileInputStream fileInputStream = new FileInputStream(replaySourceFile);
 
         return result;
     }
+
+    public StatisticsData parse(ByteSource replaySource) throws ParseException, IOException {
+        return replaySource.read(new StatisticsByteProcessor());
+    }
+
+
 }

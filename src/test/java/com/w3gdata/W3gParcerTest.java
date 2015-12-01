@@ -1,14 +1,12 @@
 package com.w3gdata;
 
-import com.google.common.base.Joiner;
-import com.google.common.io.ByteProcessor;
-import com.google.common.io.Files;
+import com.google.common.io.ByteSource;
+import com.google.common.io.Resources;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 
 import static org.junit.Assert.*;
@@ -33,28 +31,12 @@ public class W3gParcerTest {
 
     private StatisticsData statisticsData;
 
-    private File replaySourceFile;
+    private ByteSource replaySourceFile;
 
     @Before
     public void setUp() throws Exception {
-        replaySourceFile = new File(getClass().getResource(REPLY_SOURCE_FILE_NAME).toURI());
-    }
-
-    @Test
-    public void playingWithFire() throws IOException {
-        Files.asByteSource(replaySourceFile).read(new ByteProcessor<Long>() {
-            @Override
-            public boolean processBytes(byte[] buf, int off, int len) throws IOException {
-                logger.debug(Joiner.on(" ").join(buf.length, off, len));
-                return off < buf.length;
-            }
-
-            @Override
-            public Long getResult() {
-                return null;
-            }
-        });
-
+        URL resourceURL = Resources.getResource(REPLY_SOURCE_FILE_NAME);
+        replaySourceFile = Resources.asByteSource(resourceURL);
     }
 
     @Test
