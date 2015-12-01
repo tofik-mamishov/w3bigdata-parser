@@ -4,11 +4,9 @@ import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 public class W3gParcer {
-
     /**
      * Header
      */
-
     private static final int HEADER_TITLE_OFFSET = 0x0000;
 
     private static final String HEADER_TITLE = "Warcraft III recorded game\0x1A\0";
