@@ -9,9 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 
-public class W3gParcer {
+public class W3gParser {
 
-    private static final Logger logger = Logger.getLogger(W3gParcer.class);
+    private static final Logger logger = Logger.getLogger(W3gParser.class);
 
     public StatisticsData parse(File replaySourceFile) throws ParseException, FileNotFoundException {
         StatisticsData result = new StatisticsData();
