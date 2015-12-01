@@ -11,7 +11,8 @@ import java.util.List;
 public class StatisticsData {
 
     public ReplayInformation replayInformation;
-    private List<Player> players;
+    public PlayerRecord host = new PlayerRecord();
+    private List<PlayerRecord> playerRecords;
 
     private String gameMode;
 
@@ -20,16 +21,16 @@ public class StatisticsData {
     private String matchLength;
 
     public StatisticsData() {
-        players = new ArrayList<Player>();
+        playerRecords = new ArrayList<PlayerRecord>();
         replayInformation = new ReplayInformation();
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public List<PlayerRecord> getPlayerRecords() {
+        return playerRecords;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setPlayerRecords(List<PlayerRecord> playerRecords) {
+        this.playerRecords = playerRecords;
     }
 
     public String getGameMode() {

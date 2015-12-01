@@ -6,6 +6,8 @@ import com.jcraft.jzlib.JZlib;
 import com.jcraft.jzlib.ZStream;
 import org.apache.log4j.Logger;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +23,32 @@ public class StatisticsByteProcessor {
     private static final int HEADER_FILE_VERSION_OFFSET = 0x0024;
     private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
     private static final int HEADER_SIZE = 0x44;
+    public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
     private StatisticsData data = new StatisticsData();
 
     public StatisticsData process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
-        byte[] decompressedData = inflateDataBlocks(buf);
+        byte[] decompressed = inflateDataBlocks(buf);
+//        debugToFile(decompressed);
+        readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
         return data;
+    }
+
+    private void debugToFile(byte[] decompressed) {
+        try (FileOutputStream fos = new FileOutputStream("decompressed.bin")) {
+            fos.write(decompressed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readPlayerRecord(byte[] buf, int offset) {
+        PlayerRecord playerRecord = new PlayerRecord();
+        playerRecord.recordId = buf[offset];
+        playerRecord.playerId = buf[offset + 1];
+        int nullPos = findNullTermination(buf, offset + 2);
+        playerRecord.name = readString(buf, offset + 2, nullPos - (offset + 2));
     }
 
     private byte[] inflateDataBlocks(byte[] buf) throws DataFormatException {
@@ -89,16 +110,22 @@ public class StatisticsByteProcessor {
         data.replayInformation.subHeader.timeLength = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
     }
 
-    private static int readDWord(byte[] buf, int offset) {
+    public static int readDWord(byte[] buf, int offset) {
         return buf[offset + 3] << 24 | (buf[offset + 2] & 0xFF) << 16 | (buf[offset + 1] & 0xFF) << 8 | (buf[offset] & 0xFF);
     }
 
-    private static int readWord(byte[] buf, int offset) {
+    public static int readWord(byte[] buf, int offset) {
         return (buf[offset + 1] & 0xFF) << 8 | (buf[offset] & 0xFF);
     }
 
-    private static String readString(byte[] buf, int offset, int len) {
-        return new String(buf, 0, 26, Charset.defaultCharset());
+    public static String readString(byte[] buf, int offset, int len) {
+        return new String(buf, offset, len, Charset.defaultCharset());
+    }
+
+    public static int findNullTermination(byte[] buf, int offset) {
+        int i = offset;
+        while(buf[i++] != 0);
+        return i - 1;
     }
 
     static void CHECK_ERR(ZStream z, int err, String msg) {

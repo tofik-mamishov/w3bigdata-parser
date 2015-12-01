@@ -69,17 +69,7 @@ public class W3GParserTest {
 
     @Test
     public void testReadPlayersNumber() throws Exception {
-        assertEquals(EXPECTED_PLAYERS_NUMBER, statisticsData.getPlayers().size());
-    }
-
-    @Test
-    public void testReadPlayer1() throws Exception {
-        assertEquals(EXPECTED_PLAYER_NAME_1, statisticsData.getPlayers().get(0).getName());
-    }
-
-    @Test
-    public void testReadPlayer2() throws Exception {
-        assertEquals(EXPECTED_PLAYER_NAME_2, statisticsData.getPlayers().get(1).getName());
+        assertEquals(EXPECTED_PLAYERS_NUMBER, statisticsData.getPlayerRecords().size());
     }
 
     @Test
