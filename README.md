@@ -10,5 +10,6 @@ Statistics data must represent (but not limited to):
 * Map information: length of the game, name of the winner.
 * Player's information for each player: color, race, APM, key bindings.
 
+##WarCraft III Replay file format description
 
-
+Description is here: http://w3g.deepnode.de/files/w3g_format.txt
