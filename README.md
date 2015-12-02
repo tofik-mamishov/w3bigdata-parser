@@ -14,4 +14,3 @@ Statistics data must represent (but not limited to):
 ##WarCraft III Replay file format description
 
 Description is here: http://w3g.deepnode.de/files/w3g_format.txt
-- [ ] incomplete
