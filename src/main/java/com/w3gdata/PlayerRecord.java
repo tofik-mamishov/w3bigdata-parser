@@ -13,6 +13,7 @@ public class PlayerRecord {
 
     public static class AdditionalData {
         public int size;
+        public int race;
 
         @Override
         public String toString() {

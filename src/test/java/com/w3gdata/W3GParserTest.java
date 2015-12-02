@@ -11,9 +11,9 @@ import java.text.ParseException;
 
 import static org.junit.Assert.*;
 
-public class W3GParserTest {
+public class W3gParserTest {
 
-    private static final Logger logger = Logger.getLogger(W3GParserTest.class);
+    private static final Logger logger = Logger.getLogger(W3gParserTest.class);
 
     private static final String REPLAY_SOURCE_FILE_NAME = "w3replayTestFile.w3g";
 

@@ -12,6 +12,7 @@ public class W3gInfo {
 
     public ReplayInformation replayInformation;
     public PlayerRecord host = new PlayerRecord();
+    public GameSettings gameSettings = new GameSettings();
     private List<PlayerRecord> playerRecords;
 
     private String gameMode;
@@ -19,6 +20,10 @@ public class W3gInfo {
     private String map;
 
     private String matchLength;
+    public String gameName;
+    public int playerCount;
+    public int gameType;
+    public int languageId;
 
     public W3gInfo() {
         playerRecords = new ArrayList<PlayerRecord>();

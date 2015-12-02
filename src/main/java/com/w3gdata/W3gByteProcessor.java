@@ -1,10 +1,11 @@
 package com.w3gdata;
 
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.zip.DataFormatException;
 
-import static com.w3gdata.util.ByteUtils.*;
+import static com.w3gdata.util.ByteUtils.findNullTermination;
 
 public class W3gByteProcessor {
 
@@ -17,39 +18,93 @@ public class W3gByteProcessor {
     public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
     private W3gInfo data = new W3gInfo();
+    private int offset;
+    private byte[] decompressed;
 
     public W3gInfo process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
         DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
-        byte[] decompressed = reader.decompress();
-        data.host = readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
+        decompressed = reader.decompress();
+        offset = PLAYER_RECORD_OFFSET;
+        data.host = readPlayerRecord();
+        data.gameName = readNullTerminatedString();
+        offset += 1;
+        readGameSettings();
+        data.playerCount = readDWord();
+        data.gameType = readDWord();
+        data.languageId = readDWord();
+        readPlayerList();
         return data;
     }
 
-    private PlayerRecord readPlayerRecord(byte[] buf, int offset) {
+    private void readPlayerList() {
+        while (decompressed[offset] == 0x16) {
+            data.getPlayerRecords().add(readPlayerRecord());
+            offset += 4;
+        }
+    }
+
+    private PlayerRecord readPlayerRecord() {
         logger.info("Reading player record...");
         PlayerRecord playerRecord = new PlayerRecord();
-        int pos = offset;
-        playerRecord.recordId = buf[pos++];
-        playerRecord.playerId = buf[pos++];
-        playerRecord.name = readNullTerminatedString(buf, pos);
-        pos += playerRecord.name.length() + 1;
+        playerRecord.recordId = decompressed[offset++];
+        playerRecord.playerId = decompressed[offset++];
+        playerRecord.name = readNullTerminatedString();
+        playerRecord.additionalData.size = decompressed[offset++];
+        if (playerRecord.additionalData.size == 1) {
+            offset += 1;
+        } else {
+            offset += 4;
+            playerRecord.additionalData.race = readDWord();
+        }
         return playerRecord;
     }
 
+    private void readGameSettings() {
+        byte[] decoded = new EncodedStringDecoder().decode(decompressed, offset, findNullTermination(decompressed, offset) - offset);
+        offset += decoded.length + 1;
+        int pos = 0;
+        data.gameSettings.speed = decoded[pos++];
+        data.gameSettings.visibilityRules = decoded[pos++];
+        data.gameSettings.teamRules = decoded[pos++];
+        data.gameSettings.gameRules = decoded[pos++];
+        pos += 9;
+        data.gameSettings.mapName = ByteUtils.readNullTerminatedString(decoded, pos);
+        pos += data.gameSettings.mapName.length() + 1;
+        data.gameSettings.creatorName = ByteUtils.readNullTerminatedString(decoded, pos);
+    }
+
+
     private void readHeaders(byte[] buf) {
         logger.info("Reading header information...");
-        data.replayInformation.header.firstDataBlockOffset = readDWord(buf, HEADER_FIRST_DATA_BLOCK_OFFSET);
-        data.replayInformation.header.size = readDWord(buf, HEADER_COMPRESSED_FILE_SIZE_OFFSET);
-        data.replayInformation.header.headerVersion = readDWord(buf, HEADER_FILE_VERSION_OFFSET);
+        data.replayInformation.header.firstDataBlockOffset = ByteUtils.readDWord(buf, HEADER_FIRST_DATA_BLOCK_OFFSET);
+        data.replayInformation.header.size = ByteUtils.readDWord(buf, HEADER_COMPRESSED_FILE_SIZE_OFFSET);
+        data.replayInformation.header.headerVersion = ByteUtils.readDWord(buf, HEADER_FILE_VERSION_OFFSET);
         if (data.replayInformation.header.headerVersion != 0x01) {
             throw new ProcessorException("Old replays are not supported!");
         }
 
         logger.info("Reading sub header information...");
-        data.replayInformation.subHeader.versionNumber = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x0004);
-        data.replayInformation.subHeader.buildNumber = readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
-        data.replayInformation.subHeader.flags = readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
-        data.replayInformation.subHeader.timeLength = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
+        data.replayInformation.subHeader.versionNumber = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x0004);
+        data.replayInformation.subHeader.buildNumber = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
+        data.replayInformation.subHeader.flags = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
+        data.replayInformation.subHeader.timeLength = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
     }
+
+    private int readDWord() {
+        offset += 4;
+        return ByteUtils.readDWord(decompressed, offset - 4);
+    }
+
+    private int readWord() {
+        offset += 2;
+        return ByteUtils.readDWord(decompressed, offset - 2);
+    }
+
+    private String readNullTerminatedString() {
+        String result = ByteUtils.readNullTerminatedString(decompressed, offset);
+        offset += result.length() + 1;
+        return result;
+    }
+
 }
