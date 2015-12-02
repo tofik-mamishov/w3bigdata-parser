@@ -38,9 +38,36 @@ public class DataBlocksDecompressor {
             logger.info("Read " + blocks.size() + " blocks.");
             return concatenate(blocks);
         } catch (DataFormatException e) {
-            e.printStackTrace();
             throw new ProcessorException(e.getMessage(), e);
         }
+    }
+
+    private DataBlock readDataBlock(byte[] buf, int offset) throws DataFormatException {
+        DataBlock block = new DataBlock();
+        block.header.size = readWord(buf, offset);
+        block.header.decompressedSize = readWord(buf, offset + 0x0002);
+        block.decompressed = new byte[block.header.decompressedSize];
+        inflate(buf, offset, block);
+        return block;
+    }
+
+    private void inflate(byte[] buf, int offset, DataBlock block) {
+        Inflater inflater = new Inflater();
+        inflater.setInput(buf, offset + DataBlock.Header.SIZE, block.header.size, true);
+        inflater.setOutput(block.decompressed);
+        int decompressionError = inflater.init();
+        checkErrors(inflater, decompressionError, "inflateInit");
+        while (moreToInflate(block, inflater)) {
+            inflater.avail_in = inflater.avail_out = 1; /* force small buffers */
+            decompressionError = inflater.inflate(JZlib.Z_SYNC_FLUSH);
+            if (decompressionError == JZlib.Z_STREAM_END) break;
+            checkErrors(inflater, decompressionError, "inflate");
+        }
+    }
+
+    private static boolean moreToInflate(DataBlock block, Inflater inflater) {
+        return inflater.total_out < block.header.decompressedSize &&
+                inflater.total_in < block.header.size;
     }
 
     private byte[] concatenate(List<DataBlock> blocks) {
@@ -57,27 +84,6 @@ public class DataBlocksDecompressor {
             concatenated[i] = blocks.get(i).decompressed;
         }
         return Bytes.concat(concatenated);
-    }
-
-    private DataBlock readDataBlock(byte[] buf, int offset) throws DataFormatException {
-        int decompressionError;
-        DataBlock block = new DataBlock();
-        block.header.size = readWord(buf, offset);
-        block.header.decompressedSize = readWord(buf, offset + 0x0002);
-        block.decompressed = new byte[block.header.decompressedSize];
-        Inflater inflater = new Inflater();
-        inflater.setInput(buf, offset + DataBlock.Header.SIZE, block.header.size, true);
-        inflater.setOutput(block.decompressed);
-        decompressionError = inflater.init();
-        checkErrors(inflater, decompressionError, "inflateInit");
-        while (inflater.total_out < block.header.decompressedSize &&
-                inflater.total_in < block.header.size) {
-            inflater.avail_in = inflater.avail_out = 1; /* force small buffers */
-            decompressionError = inflater.inflate(JZlib.Z_SYNC_FLUSH);
-            if (decompressionError == JZlib.Z_STREAM_END) break;
-            checkErrors(inflater, decompressionError, "inflate");
-        }
-        return block;
     }
 
     private static void checkErrors(ZStream z, int err, String msg) {
