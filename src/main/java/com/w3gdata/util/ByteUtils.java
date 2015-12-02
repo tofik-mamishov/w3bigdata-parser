@@ -1,5 +1,7 @@
 package com.w3gdata.util;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 public final class ByteUtils {
@@ -29,6 +31,14 @@ public final class ByteUtils {
         int i = offset;
         while(buf[i++] != 0);
         return i - 1;
+    }
+
+    public static void debugToFile(byte[] decompressed, String fileName) {
+        try (FileOutputStream fos = new FileOutputStream(fileName)) {
+            fos.write(decompressed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

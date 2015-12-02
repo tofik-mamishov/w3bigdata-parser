@@ -2,8 +2,6 @@ package com.w3gdata;
 
 import org.apache.log4j.Logger;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.zip.DataFormatException;
 
 import static com.w3gdata.util.ByteUtils.*;
@@ -25,7 +23,6 @@ public class StatisticsByteProcessor {
         readHeaders(buf);
         DataBlocksDecompressor decompressor = new DataBlocksDecompressor(buf, data.replayInformation.header.firstDataBlockOffset);
         byte[] decompressed = decompressor.decompress();
-//        debugToFile(decompressed);
         data.host = readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
         return data;
     }
@@ -51,13 +48,5 @@ public class StatisticsByteProcessor {
         data.replayInformation.subHeader.buildNumber = readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
         data.replayInformation.subHeader.flags = readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
         data.replayInformation.subHeader.timeLength = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
-    }
-
-    private void debugToFile(byte[] decompressed) {
-        try (FileOutputStream fos = new FileOutputStream("decompressed.bin")) {
-            fos.write(decompressed);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

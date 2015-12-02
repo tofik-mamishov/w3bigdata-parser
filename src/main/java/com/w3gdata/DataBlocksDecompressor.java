@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.ToIntFunction;
 import java.util.zip.DataFormatException;
 
+import static com.w3gdata.util.ByteUtils.debugToFile;
 import static com.w3gdata.util.ByteUtils.readWord;
 
 public class DataBlocksDecompressor {
@@ -19,6 +20,7 @@ public class DataBlocksDecompressor {
 
     private final byte[] buf;
     private final int firstBlockOffset;
+    private boolean debugMode;
 
     public DataBlocksDecompressor(byte[] buf, int firstBlockOffset) {
         this.buf = buf;
@@ -36,7 +38,11 @@ public class DataBlocksDecompressor {
                 blocks.add(block);
             }
             logger.info("Read " + blocks.size() + " blocks.");
-            return concatenate(blocks);
+            byte[] result = concatenate(blocks);
+            if (isDebugMode()) {
+                debugToFile(result, "decompressed.bin");
+            }
+            return result;
         } catch (DataFormatException e) {
             throw new ProcessorException(e.getMessage(), e);
         }
@@ -92,5 +98,13 @@ public class DataBlocksDecompressor {
             logger.error(msg + " error: " + err);
             throw new ProcessorException(msg + " error: " + err);
         }
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
     }
 }
