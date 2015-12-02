@@ -2,7 +2,7 @@ package com.w3gdata;
 
 import org.junit.Test;
 
-import static com.w3gdata.StatisticsByteProcessor.findNullTermination;
+import static com.w3gdata.util.ByteUtils.findNullTermination;
 import static org.junit.Assert.assertEquals;
 
 public class StatisticsByteProcessorTest {
