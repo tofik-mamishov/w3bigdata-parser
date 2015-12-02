@@ -34,7 +34,34 @@ public class W3gByteProcessor {
         data.gameType = readDWord();
         data.languageId = readDWord();
         readPlayerList();
+        readGameStartRecord();
         return data;
+    }
+
+    private void readGameStartRecord() {
+        data.gameStartRecord.id = decompressed[offset++];
+        offset+= 2;
+        int numberOfSlots = decompressed[offset++];
+        for (int i = 0; i < numberOfSlots; i++) {
+            data.gameStartRecord.slots.add(readSlot());
+        }
+        offset += 4;
+        data.gameStartRecord.mode = decompressed[offset++];
+        data.gameStartRecord.startSpotCount = decompressed[offset++];
+    }
+
+    private GameStartRecord.SlotRecord readSlot() {
+        GameStartRecord.SlotRecord slot = new GameStartRecord.SlotRecord();
+        slot.id = decompressed[offset++];
+        slot.mapDownloadPercent = decompressed[offset++];
+        slot.status = decompressed[offset++];
+        slot.computerPlayerFlag = decompressed[offset++];
+        slot.teamNumber = decompressed[offset++];
+        slot.color = decompressed[offset++];
+        slot.playerRaceFlags = decompressed[offset++];
+        slot.computerAIStrength = decompressed[offset++];
+        slot.handicap = decompressed[offset++];
+        return slot;
     }
 
     private void readPlayerList() {

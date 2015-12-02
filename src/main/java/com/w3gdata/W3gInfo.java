@@ -13,6 +13,7 @@ public class W3gInfo {
     public ReplayInformation replayInformation;
     public PlayerRecord host = new PlayerRecord();
     public GameSettings gameSettings = new GameSettings();
+    public GameStartRecord gameStartRecord = new GameStartRecord();
     private List<PlayerRecord> playerRecords;
 
     private String gameMode;
