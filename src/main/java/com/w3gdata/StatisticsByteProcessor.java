@@ -31,16 +31,18 @@ public class StatisticsByteProcessor {
         readHeaders(buf);
         byte[] decompressed = inflateDataBlocks(buf);
 //        debugToFile(decompressed);
-        readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
+        data.host = readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
         return data;
     }
 
-    private void readPlayerRecord(byte[] buf, int offset) {
+    private PlayerRecord readPlayerRecord(byte[] buf, int offset) {
         PlayerRecord playerRecord = new PlayerRecord();
-        playerRecord.recordId = buf[offset];
-        playerRecord.playerId = buf[offset + 1];
-        int nullPos = findNullTermination(buf, offset + 2);
-        playerRecord.name = readString(buf, offset + 2, nullPos - (offset + 2));
+        int pos = offset;
+        playerRecord.recordId = buf[pos++];
+        playerRecord.playerId = buf[pos++];
+        playerRecord.name = readNullTerminatedString(buf, pos);
+        pos += playerRecord.name.length() + 1;
+        return playerRecord;
     }
 
     private byte[] inflateDataBlocks(byte[] buf) throws DataFormatException {
@@ -121,6 +123,11 @@ public class StatisticsByteProcessor {
 
     public static String readString(byte[] buf, int offset, int len) {
         return new String(buf, offset, len, Charset.defaultCharset());
+    }
+
+    public static String readNullTerminatedString(byte[] buf, int offset) {
+        int len = findNullTermination(buf, offset) - offset;
+        return readString(buf, offset, len);
     }
 
     public static int findNullTermination(byte[] buf, int offset) {

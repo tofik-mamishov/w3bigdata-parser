@@ -58,8 +58,14 @@ public class W3GParserTest {
             ReplayInformation expectedReplayInformation = new ReplayInformation();
             expectedReplayInformation.header = expectedHeader;
             expectedReplayInformation.subHeader = expectedSubHeader;
+
+            PlayerRecord host = new PlayerRecord();
+            host.playerId = 2;
+            host.recordId = 0;
+            host.name = EXPECTED_PLAYER_NAME_1;
             StatisticsData expectedData = new StatisticsData();
             expectedData.replayInformation = expectedReplayInformation;
+            expectedData.host = host;
             assertEquals(expectedData, statisticsData);
         } catch (ParseException e) {
             fail("Should never happen!");
