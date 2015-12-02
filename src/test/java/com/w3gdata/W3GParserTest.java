@@ -29,7 +29,7 @@ public class W3GParserTest {
 
     private static int EXPECTED_MATCH_LENGTH_MS = (45*60 + 24) * 1000 + 150;
 
-    private StatisticsData statisticsData;
+    private W3gInfo w3gInfo;
     private ByteSource replaySourceFile;
     private W3gParser parser;
 
@@ -44,7 +44,7 @@ public class W3GParserTest {
     @Test
     public void testParseHeader() throws Exception {
         try {
-            statisticsData = parser.parse(replaySourceFile);
+            w3gInfo = parser.parse(replaySourceFile);
             ReplayInformation.Header expectedHeader = new ReplayInformation.Header();
             expectedHeader.headerVersion = 1;
             expectedHeader.size = (int) replaySourceFile.size();
@@ -63,29 +63,29 @@ public class W3GParserTest {
             host.playerId = 2;
             host.recordId = 0;
             host.name = EXPECTED_PLAYER_NAME_1;
-            StatisticsData expectedData = new StatisticsData();
+            W3gInfo expectedData = new W3gInfo();
             expectedData.replayInformation = expectedReplayInformation;
             expectedData.host = host;
-            assertEquals(expectedData, statisticsData);
+            assertEquals(expectedData, w3gInfo);
         } catch (ParseException e) {
             fail("Should never happen!");
         }
-        assertNotNull(statisticsData);
+        assertNotNull(w3gInfo);
     }
 
     @Test
     public void testReadPlayersNumber() throws Exception {
-        assertEquals(EXPECTED_PLAYERS_NUMBER, statisticsData.getPlayerRecords().size());
+        assertEquals(EXPECTED_PLAYERS_NUMBER, w3gInfo.getPlayerRecords().size());
     }
 
     @Test
     public void testReadGameMode() throws Exception {
-        assertEquals(EXPECTED_GAME_MODE, statisticsData.getGameMode());
+        assertEquals(EXPECTED_GAME_MODE, w3gInfo.getGameMode());
     }
 
     @Test
     public void testReadMap() throws Exception {
-        assertEquals(EXPECTED_MAP, statisticsData.getMap());
+        assertEquals(EXPECTED_MAP, w3gInfo.getMap());
     }
 }
 

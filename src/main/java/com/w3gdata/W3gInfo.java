@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsData {
+public class W3gInfo {
 
     public ReplayInformation replayInformation;
     public PlayerRecord host = new PlayerRecord();
@@ -20,7 +20,7 @@ public class StatisticsData {
 
     private String matchLength;
 
-    public StatisticsData() {
+    public W3gInfo() {
         playerRecords = new ArrayList<PlayerRecord>();
         replayInformation = new ReplayInformation();
     }

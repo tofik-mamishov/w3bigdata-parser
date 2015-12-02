@@ -6,9 +6,9 @@ import java.util.zip.DataFormatException;
 
 import static com.w3gdata.util.ByteUtils.*;
 
-public class StatisticsByteProcessor {
+public class W3gByteProcessor {
 
-    private static final Logger logger = Logger.getLogger(StatisticsByteProcessor.class);
+    private static final Logger logger = Logger.getLogger(W3gByteProcessor.class);
 
     private static final int HEADER_FIRST_DATA_BLOCK_OFFSET = 0x001C;
     private static final int HEADER_COMPRESSED_FILE_SIZE_OFFSET = 0x0020;
@@ -16,9 +16,9 @@ public class StatisticsByteProcessor {
     private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
     public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
-    private StatisticsData data = new StatisticsData();
+    private W3gInfo data = new W3gInfo();
 
-    public StatisticsData process(byte[] buf) throws DataFormatException {
+    public W3gInfo process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
         DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
         byte[] decompressed = reader.decompress();

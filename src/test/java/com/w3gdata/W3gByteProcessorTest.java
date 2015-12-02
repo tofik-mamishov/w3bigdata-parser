@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.w3gdata.util.ByteUtils.findNullTermination;
 import static org.junit.Assert.assertEquals;
 
-public class StatisticsByteProcessorTest {
+public class W3gByteProcessorTest {
 
     @Test
     public void nullTerminationNullFirst() {

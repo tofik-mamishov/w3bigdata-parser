@@ -14,15 +14,15 @@ public class W3gParser {
 
     private static final Logger logger = Logger.getLogger(W3gParser.class);
 
-    public StatisticsData parse(File replaySourceFile) throws ParseException, FileNotFoundException {
-        StatisticsData result = new StatisticsData();
+    public W3gInfo parse(File replaySourceFile) throws ParseException, FileNotFoundException {
+        W3gInfo result = new W3gInfo();
         FileInputStream fileInputStream = new FileInputStream(replaySourceFile);
 
         return result;
     }
 
-    public StatisticsData parse(ByteSource replaySource) throws ParseException, IOException, DataFormatException {
-        return new StatisticsByteProcessor().process(replaySource.read());
+    public W3gInfo parse(ByteSource replaySource) throws ParseException, IOException, DataFormatException {
+        return new W3gByteProcessor().process(replaySource.read());
     }
 
 
