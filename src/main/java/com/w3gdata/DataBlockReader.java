@@ -14,15 +14,15 @@ import java.util.zip.DataFormatException;
 import static com.w3gdata.util.ByteUtils.debugToFile;
 import static com.w3gdata.util.ByteUtils.readWord;
 
-public class DataBlocksDecompressor {
+public class DataBlockReader {
 
-    private static final Logger logger = Logger.getLogger(DataBlocksDecompressor.class);
+    private static final Logger logger = Logger.getLogger(DataBlockReader.class);
 
     private final byte[] buf;
     private final int firstBlockOffset;
     private boolean debugMode;
 
-    public DataBlocksDecompressor(byte[] buf, int firstBlockOffset) {
+    public DataBlockReader(byte[] buf, int firstBlockOffset) {
         this.buf = buf;
         this.firstBlockOffset = firstBlockOffset;
     }

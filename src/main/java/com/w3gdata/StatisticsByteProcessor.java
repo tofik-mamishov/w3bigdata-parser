@@ -14,20 +14,20 @@ public class StatisticsByteProcessor {
     private static final int HEADER_COMPRESSED_FILE_SIZE_OFFSET = 0x0020;
     private static final int HEADER_FILE_VERSION_OFFSET = 0x0024;
     private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
-    private static final int HEADER_SIZE = 0x44;
     public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
     private StatisticsData data = new StatisticsData();
 
     public StatisticsData process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
-        DataBlocksDecompressor decompressor = new DataBlocksDecompressor(buf, data.replayInformation.header.firstDataBlockOffset);
-        byte[] decompressed = decompressor.decompress();
+        DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
+        byte[] decompressed = reader.decompress();
         data.host = readPlayerRecord(decompressed, PLAYER_RECORD_OFFSET);
         return data;
     }
 
     private PlayerRecord readPlayerRecord(byte[] buf, int offset) {
+        logger.info("Reading player record...");
         PlayerRecord playerRecord = new PlayerRecord();
         int pos = offset;
         playerRecord.recordId = buf[pos++];
