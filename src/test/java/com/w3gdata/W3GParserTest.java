@@ -15,7 +15,7 @@ public class W3GParserTest {
 
     private static final Logger logger = Logger.getLogger(W3GParserTest.class);
 
-    private static final String REPLY_SOURCE_FILE_NAME = "w3replayTestFile.w3g";
+    private static final String REPLAY_SOURCE_FILE_NAME = "w3replayTestFile.w3g";
 
     private static final int EXPECTED_PLAYERS_NUMBER = 2;
 
@@ -35,7 +35,7 @@ public class W3GParserTest {
 
     @Before
     public void setUp() throws Exception {
-        URL resourceURL = Resources.getResource(REPLY_SOURCE_FILE_NAME);
+        URL resourceURL = Resources.getResource(REPLAY_SOURCE_FILE_NAME);
         replaySourceFile = Resources.asByteSource(resourceURL);
         parser = new W3gParser();
     }

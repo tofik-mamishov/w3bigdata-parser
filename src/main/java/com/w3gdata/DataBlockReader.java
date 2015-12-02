@@ -84,7 +84,7 @@ public class DataBlockReader {
             }
         }).reduce(0, Integer::sum);
         logger.info("Total inflated size is: " + totalSize);
-        //Any suggestions to make it more functional?
+        //TODO: Any suggestions to make it more functional?
         byte[][] concatenated = new byte[blocks.size()][];
         for (int i = 0; i < blocks.size(); i++) {
             concatenated[i] = blocks.get(i).decompressed;

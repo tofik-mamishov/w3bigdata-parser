@@ -39,9 +39,12 @@ public class StatisticsByteProcessor {
 
     private void readHeaders(byte[] buf) {
         logger.info("Reading header information...");
-        data.replayInformation.header.size = readDWord(buf, HEADER_COMPRESSED_FILE_SIZE_OFFSET);
         data.replayInformation.header.firstDataBlockOffset = readDWord(buf, HEADER_FIRST_DATA_BLOCK_OFFSET);
+        data.replayInformation.header.size = readDWord(buf, HEADER_COMPRESSED_FILE_SIZE_OFFSET);
         data.replayInformation.header.headerVersion = readDWord(buf, HEADER_FILE_VERSION_OFFSET);
+        if (data.replayInformation.header.headerVersion != 0x01) {
+            throw new ProcessorException("Old replays are not supported!");
+        }
 
         logger.info("Reading sub header information...");
         data.replayInformation.subHeader.versionNumber = readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x0004);
