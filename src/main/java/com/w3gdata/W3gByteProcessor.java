@@ -37,8 +37,6 @@ public class W3gByteProcessor {
         data.languageId = readDWord();
         readPlayerList();
         readGameStartRecord();
-        readLeaveGameRecord();
-        offset += FIRST_STARTBLOCK.size + SECOND_STARTBLOCK.size + THIRD_STARTBLOCK.size;
         return data;
     }
 
@@ -127,21 +125,9 @@ public class W3gByteProcessor {
         return ByteUtils.readDWord(decompressed, offset - 4);
     }
 
-    private int readWord() {
-        offset += 2;
-        return ByteUtils.readDWord(decompressed, offset - 2);
-    }
-
     private String readNullTerminatedString() {
         String result = ByteUtils.readNullTerminatedString(decompressed, offset);
         offset += result.length() + 1;
         return result;
-    }
-
-    private void readLeaveGameRecord() {
-        data.leaveGameRecord.reason = readDWord();
-        data.leaveGameRecord.playerId = decompressed[offset++];
-        data.leaveGameRecord.result = readDWord();
-        offset += 4;
     }
 }

@@ -10,7 +10,7 @@ public enum ReplayDataFormat {
     THIRD_STARTBLOCK(0x1C, 5, false),
     CHECKSUM_RANDOM_OR_SEED(0x22, 6, false),
     UNKNOWN(0x23, 11, false),
-    FORCED_GAME_END_COUNTDOWN(0x2F, 9, false);
+    FORCED_GAME_END_COUNTDOWN(0x2F, 9, true);
 
     static Map<Integer, ReplayDataFormat> formats;
 
