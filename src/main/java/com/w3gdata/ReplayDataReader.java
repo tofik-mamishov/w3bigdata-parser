@@ -15,10 +15,12 @@ public class ReplayDataReader {
         //todo continued...
     }
 
-    private void readLeaveGameRecord() {
-        data.leaveGameRecord.reason = buf.readDWord();
-        data.leaveGameRecord.playerId = buf.readByte();
-        data.leaveGameRecord.result = buf.readDWord();
+    private LeaveGameRecord readLeaveGameRecord() {
+        LeaveGameRecord leaveGameRecord = new LeaveGameRecord();
+        leaveGameRecord.reason = buf.readDWord();
+        leaveGameRecord.playerId = buf.readByte();
+        leaveGameRecord.result = buf.readDWord();
         buf.increment(4);
+        return leaveGameRecord;
     }
 }

@@ -14,7 +14,7 @@ public class W3gInfo {
     public PlayerRecord host = new PlayerRecord();
     public GameSettings gameSettings = new GameSettings();
     public GameStartRecord gameStartRecord = new GameStartRecord();
-    public LeaveGameRecord leaveGameRecord = new LeaveGameRecord();
+    public List<LeaveGameRecord> leaveGameRecords;
     private List<PlayerRecord> playerRecords;
 
     private String gameMode;
@@ -28,7 +28,8 @@ public class W3gInfo {
     public int languageId;
 
     public W3gInfo() {
-        playerRecords = new ArrayList<PlayerRecord>();
+        playerRecords = new ArrayList<>();
+        leaveGameRecords = new ArrayList<>();
         replayInformation = new ReplayInformation();
     }
 
