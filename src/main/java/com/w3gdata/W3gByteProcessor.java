@@ -1,5 +1,7 @@
 package com.w3gdata;
 
+import static com.w3gdata.ReplayDataFormat.*;
+
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
@@ -35,6 +37,8 @@ public class W3gByteProcessor {
         data.languageId = readDWord();
         readPlayerList();
         readGameStartRecord();
+        readLeaveGameRecord();
+        offset += FIRST_STARTBLOCK.size + SECOND_STARTBLOCK.size + THIRD_STARTBLOCK.size;
         return data;
     }
 
@@ -134,4 +138,10 @@ public class W3gByteProcessor {
         return result;
     }
 
+    private void readLeaveGameRecord() {
+        data.leaveGameRecord.reason = readDWord();
+        data.leaveGameRecord.playerId = decompressed[offset++];
+        data.leaveGameRecord.result = readDWord();
+        offset += 4;
+    }
 }

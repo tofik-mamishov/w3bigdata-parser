@@ -14,6 +14,7 @@ public class W3gInfo {
     public PlayerRecord host = new PlayerRecord();
     public GameSettings gameSettings = new GameSettings();
     public GameStartRecord gameStartRecord = new GameStartRecord();
+    public LeaveGameRecord leaveGameRecord = new LeaveGameRecord();
     private List<PlayerRecord> playerRecords;
 
     private String gameMode;
