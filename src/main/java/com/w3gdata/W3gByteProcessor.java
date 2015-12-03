@@ -1,13 +1,10 @@
 package com.w3gdata;
 
-import static com.w3gdata.ReplayDataFormat.*;
-
+import com.w3gdata.util.ByteBuffer;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.zip.DataFormatException;
-
-import static com.w3gdata.util.ByteUtils.findNullTermination;
 
 public class W3gByteProcessor {
 
@@ -20,78 +17,77 @@ public class W3gByteProcessor {
     public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
     private W3gInfo data = new W3gInfo();
-    private int offset;
-    private byte[] decompressed;
+    private ByteBuffer decompressed;
 
     public W3gInfo process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
         DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
-        decompressed = reader.decompress();
-        offset = PLAYER_RECORD_OFFSET;
+        decompressed = new ByteBuffer(reader.decompress(), PLAYER_RECORD_OFFSET);
         data.host = readPlayerRecord();
-        data.gameName = readNullTerminatedString();
-        offset += 1;
+        data.gameName = decompressed.readNullTerminatedString();
+        decompressed.increment(1);
         readGameSettings();
-        data.playerCount = readDWord();
-        data.gameType = readDWord();
-        data.languageId = readDWord();
+        data.playerCount = decompressed.readDWord();
+        data.gameType = decompressed.readDWord();
+        data.languageId = decompressed.readDWord();
         readPlayerList();
         readGameStartRecord();
         return data;
     }
 
     private void readGameStartRecord() {
-        data.gameStartRecord.id = decompressed[offset++];
-        offset+= 2;
-        int numberOfSlots = decompressed[offset++];
+        data.gameStartRecord.id = decompressed.readByte();
+        decompressed.increment(2);
+        int numberOfSlots = decompressed.readByte();
         for (int i = 0; i < numberOfSlots; i++) {
             data.gameStartRecord.slots.add(readSlot());
         }
-        offset += 4;
-        data.gameStartRecord.mode = decompressed[offset++];
-        data.gameStartRecord.startSpotCount = decompressed[offset++];
+        decompressed.increment(4);
+        data.gameStartRecord.mode = decompressed.readByte();
+        data.gameStartRecord.startSpotCount = decompressed.readByte();
     }
 
     private GameStartRecord.SlotRecord readSlot() {
         GameStartRecord.SlotRecord slot = new GameStartRecord.SlotRecord();
-        slot.id = decompressed[offset++];
-        slot.mapDownloadPercent = decompressed[offset++];
-        slot.status = decompressed[offset++];
-        slot.computerPlayerFlag = decompressed[offset++];
-        slot.teamNumber = decompressed[offset++];
-        slot.color = decompressed[offset++];
-        slot.playerRaceFlags = decompressed[offset++];
-        slot.computerAIStrength = decompressed[offset++];
-        slot.handicap = decompressed[offset++];
+        slot.id = decompressed.readByte();
+        slot.mapDownloadPercent = decompressed.readByte();
+        slot.status = decompressed.readByte();
+        slot.computerPlayerFlag = decompressed.readByte();
+        slot.teamNumber = decompressed.readByte();
+        slot.color = decompressed.readByte();
+        slot.playerRaceFlags = decompressed.readByte();
+        slot.computerAIStrength = decompressed.readByte();
+        slot.handicap = decompressed.readByte();
         return slot;
     }
 
     private void readPlayerList() {
-        while (decompressed[offset] == 0x16) {
+        while (decompressed.peek() == 0x16) {
             data.getPlayerRecords().add(readPlayerRecord());
-            offset += 4;
+            decompressed.increment(4);
         }
     }
 
     private PlayerRecord readPlayerRecord() {
         logger.info("Reading player record...");
         PlayerRecord playerRecord = new PlayerRecord();
-        playerRecord.recordId = decompressed[offset++];
-        playerRecord.playerId = decompressed[offset++];
-        playerRecord.name = readNullTerminatedString();
-        playerRecord.additionalData.size = decompressed[offset++];
+        playerRecord.recordId = decompressed.readByte();
+        playerRecord.playerId = decompressed.readByte();
+        playerRecord.name = decompressed.readNullTerminatedString();
+        playerRecord.additionalData.size = decompressed.readByte();
         if (playerRecord.additionalData.size == 1) {
-            offset += 1;
+            decompressed.increment(1);
         } else {
-            offset += 4;
-            playerRecord.additionalData.race = readDWord();
+            decompressed.increment(4);
+            playerRecord.additionalData.race = decompressed.readDWord();
         }
         return playerRecord;
     }
 
     private void readGameSettings() {
-        byte[] decoded = new EncodedStringDecoder().decode(decompressed, offset, findNullTermination(decompressed, offset) - offset);
-        offset += decoded.length + 1;
+        int currentOffset = decompressed.getOffset();
+        byte[] decoded = new EncodedStringDecoder().decode(decompressed.getBuf(), currentOffset, decompressed.findNullTermination() - currentOffset);
+        decompressed.increment(decoded.length + 1);
         int pos = 0;
         data.gameSettings.speed = decoded[pos++];
         data.gameSettings.visibilityRules = decoded[pos++];
@@ -118,16 +114,5 @@ public class W3gByteProcessor {
         data.replayInformation.subHeader.buildNumber = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
         data.replayInformation.subHeader.flags = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
         data.replayInformation.subHeader.timeLength = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
-    }
-
-    private int readDWord() {
-        offset += 4;
-        return ByteUtils.readDWord(decompressed, offset - 4);
-    }
-
-    private String readNullTerminatedString() {
-        String result = ByteUtils.readNullTerminatedString(decompressed, offset);
-        offset += result.length() + 1;
-        return result;
     }
 }
