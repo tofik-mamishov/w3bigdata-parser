@@ -1,5 +1,7 @@
 package com.w3gdata;
 
+import static com.w3gdata.ReplayDataFormat.*;
+
 import com.w3gdata.util.ByteBuffer;
 
 public class ReplayDataReader {
@@ -12,7 +14,29 @@ public class ReplayDataReader {
     }
 
     public void read() {
+        while(buf.hasNext()) {
+            ReplayDataFormat replayDataFormat = getFormatByCode(buf.peek());
+            if (replayDataFormat != null) {
+                if (replayDataFormat.isKnown) {
+                    processBlockByFormat(replayDataFormat);
+                } else {
+                    buf.increment(replayDataFormat.fixedSize);
+                }
+            }
+        }
         //todo continued...
+    }
+
+    private void processBlockByFormat(ReplayDataFormat replayDataFormat) {
+        if (replayDataFormat == LEAVE_GAME) {
+            data.leaveGameRecords.add(readLeaveGameRecord());
+        } else if (replayDataFormat == FORCED_GAME_END_COUNTDOWN) {
+            data.forcedGameEndCountdownRecords.add(readForcedGameEndCountdownRecord());
+        } else if (replayDataFormat == TIME_SLOT_BLOCK_OLD || replayDataFormat == TIME_SLOT_BLOCK_NEW) {
+
+        } else if (replayDataFormat == PLAYER_CHAT_MESSAGE) {
+
+        }
     }
 
     private LeaveGameRecord readLeaveGameRecord() {
@@ -22,5 +46,21 @@ public class ReplayDataReader {
         leaveGameRecord.result = buf.readDWord();
         buf.increment(4);
         return leaveGameRecord;
+    }
+
+    private ForcedGameEndCountdownRecord readForcedGameEndCountdownRecord() {
+        ForcedGameEndCountdownRecord forcedCountdown = new ForcedGameEndCountdownRecord();
+        forcedCountdown.mode = buf.readDWord();
+        forcedCountdown.countdown = buf.readDWord();
+        return forcedCountdown;
+    }
+
+    private TimeBlock readTimeBlock() {
+        TimeBlock timeBlock = new TimeBlock();
+        timeBlock.n = buf.readWord();
+        timeBlock.timeIncrement = buf.readWord();
+        byte[] commandDataBlocks = buf.readBytes(timeBlock.n - 2);
+
+        return timeBlock;
     }
 }

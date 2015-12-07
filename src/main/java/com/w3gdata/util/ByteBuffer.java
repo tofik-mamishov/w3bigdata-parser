@@ -22,6 +22,14 @@ public class ByteBuffer {
         return buf[offset++];
     }
 
+    public byte[] readBytes(int n) {
+        byte[] result = new byte[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = buf[offset++];
+        }
+        return result;
+    }
+
     public byte[] getBuf() {
         return buf;
     }
@@ -35,6 +43,11 @@ public class ByteBuffer {
         return ByteUtils.readDWord(buf, offset - 4);
     }
 
+    public int readWord() {
+        offset += 2;
+        return ByteUtils.readWord(buf, offset - 2);
+    }
+
     public int findNullTermination() {
         int i = offset;
         while(buf[i++] != 0);
@@ -46,5 +59,9 @@ public class ByteBuffer {
         String result = ByteUtils.readNullTerminatedString(buf, offset);
         offset += result.length() + 1;
         return result;
+    }
+
+    public boolean hasNext() {
+        return offset < buf.length;
     }
 }
