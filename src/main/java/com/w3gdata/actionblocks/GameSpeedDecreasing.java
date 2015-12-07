@@ -1,5 +1,5 @@
 package com.w3gdata.actionblocks;
 
 public class GameSpeedDecreasing extends ActionBlock {
-    public final byte id = 0x05;
+    public static final int ID = 0x05;
 }

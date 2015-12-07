@@ -1,6 +1,6 @@
 package com.w3gdata.actionblocks;
 
 public class SaveGame extends ActionBlock {
-    public final byte id = 0x06;
-    public byte[] saveGameName;
+    public static final int ID = 0x06;
+    public byte[] saveGameName;//null terminated string
 }

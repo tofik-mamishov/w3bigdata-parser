@@ -1,5 +1,5 @@
 package com.w3gdata.actionblocks;
 
 public class ResumeGame extends ActionBlock {
-    public final byte id = 0x02;
+    public static final int ID = 0x02;
 }
