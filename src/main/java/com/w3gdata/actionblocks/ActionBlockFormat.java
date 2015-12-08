@@ -17,7 +17,12 @@ public enum ActionBlockFormat {
     ITEM_GIVEN_DROPPED(ItemGivenDropped.ID, ItemGivenDropped.class),
     UNIT_BUILDING_ABILITY_2_TARGETS_2_ITEMS(UnitBuildingAbility2Targets2Items.ID,
             UnitBuildingAbility2Targets2Items.class),
-
+    CHANGE_SELECTION(ChangeSelection.ID, ChangeSelection.class),
+    ASSIGN_GROUP_HOTKEY(AssignGroupHotkey.ID, AssignGroupHotkey.class),
+    SELECT_GROUP_HOTKEY(SelectGroupHotkey.ID, SelectGroupHotkey.class),
+    SELECT_SUBGROUP(SelectSubgroup.ID, SelectSubgroup.class),
+    SELECT_SUBGROUP_1_14b(SelectSubgroup114b.ID, SelectSubgroup114b.class),
+    PRE_SUBSELECTION(PreSubselection.ID, PreSubselection.class),
     ;
 
     final static Map<Integer, ActionBlockFormat> formats;
