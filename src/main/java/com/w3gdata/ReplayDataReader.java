@@ -2,7 +2,12 @@ package com.w3gdata;
 
 import static com.w3gdata.ReplayDataFormat.*;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.w3gdata.actionblock.ActionBlock;
+import com.w3gdata.actionblock.ActionBlockFormat;
 import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteUtils;
 
 public class ReplayDataReader {
     private final W3gInfo data;
@@ -15,7 +20,7 @@ public class ReplayDataReader {
 
     public void read() {
         while(buf.hasNext()) {
-            ReplayDataFormat replayDataFormat = getFormatByCode(buf.peek());
+            ReplayDataFormat replayDataFormat = getById(buf.peek());
             if (replayDataFormat != null) {
                 if (replayDataFormat.isKnown) {
                     processBlockByFormat(replayDataFormat);
@@ -55,12 +60,35 @@ public class ReplayDataReader {
         return forcedCountdown;
     }
 
-    private TimeBlock readTimeBlock() {
-        TimeBlock timeBlock = new TimeBlock();
-        timeBlock.n = buf.readWord();
-        timeBlock.timeIncrement = buf.readWord();
-        byte[] commandDataBlocks = buf.readBytes(timeBlock.n - 2);
+    private TimeSlotBlock readTimeBlock() {
+        TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
+        timeSlotBlock.n = buf.readWord();
+        timeSlotBlock.timeIncrement = buf.readWord();
+        byte[] commandDataBytes = buf.readBytes(timeSlotBlock.n - 2);
 
-        return timeBlock;
+        return timeSlotBlock;
+    }
+
+    private Multimap<Byte, CommandData> readCommandDataBlocks(byte[] commandDataBytes) {
+        Multimap<Byte, CommandData> commandDataBlocks = ArrayListMultimap.create();
+        for (int i = 0; i < commandDataBytes.length; i++) {
+            CommandData commandData = new CommandData();
+            commandData.playerId = commandDataBytes[i++];
+            commandData.actionBlockLength = ByteUtils.readWord(commandDataBytes, i);
+            commandData.actionBlocks = readActionBlocks(
+                    ByteUtils.readBytes(commandDataBytes, i, commandData.actionBlockLength)
+            );
+        }
+        return commandDataBlocks;
+    }
+
+    private Multimap<Integer, ActionBlock> readActionBlocks(byte[] actionBlocksBytes) {
+        Multimap<Integer, ActionBlock> actionBlocks = ArrayListMultimap.create();
+        for (int i = 0; i < actionBlocksBytes.length; i++) {
+            int id = actionBlocksBytes[i++];
+            //ActionBlockFormat.getTypeById(id);
+            //todo action blocks parsing. Maybe we need to specify concrete types?
+        }
+        return actionBlocks;
     }
 }

@@ -1,18 +1,17 @@
 package com.w3gdata;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.w3gdata.actionblock.ActionBlock;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandData {
     public byte playerId;
 
     public int actionBlockLength;
 
-    public List<ActionBlock> actionBlocks;
+    public Multimap<Integer, ActionBlock> actionBlocks;
 
     public CommandData() {
-        actionBlocks = new ArrayList<>();
+        actionBlocks = ArrayListMultimap.create();
     }
 }

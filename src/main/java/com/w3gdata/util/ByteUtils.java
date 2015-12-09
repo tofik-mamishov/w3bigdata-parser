@@ -41,4 +41,12 @@ public final class ByteUtils {
         }
     }
 
+    public static byte[] readBytes(byte[] buf, int offset, int n) {
+        byte[] result = new byte[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = buf[offset++];
+        }
+        return result;
+    }
+
 }

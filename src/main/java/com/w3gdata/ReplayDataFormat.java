@@ -20,23 +20,23 @@ public enum ReplayDataFormat {
     static {
         formats = new HashMap<>();
         for (ReplayDataFormat format : ReplayDataFormat.values()) {
-            formats.put(format.code, format);
+            formats.put(format.id, format);
         }
     }
 
-    public int code;
+    public int id;
 
     public int fixedSize;
 
     public boolean isKnown;
 
-    ReplayDataFormat(int code, int fixedSize, boolean isKnown) {
-        this.code = code;
+    ReplayDataFormat(int id, int fixedSize, boolean isKnown) {
+        this.id = id;
         this.fixedSize = fixedSize;
         this.isKnown = isKnown;
     }
 
-    public static ReplayDataFormat getFormatByCode(int code) {
+    public static ReplayDataFormat getById(int code) {
         return formats.get(code);
     }
 }
