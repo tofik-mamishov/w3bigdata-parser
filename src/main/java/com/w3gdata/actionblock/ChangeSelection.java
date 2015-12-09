@@ -1,4 +1,4 @@
-package com.w3gdata.actionblocks;
+package com.w3gdata.actionblock;
 
 import java.util.ArrayList;
 import java.util.List;

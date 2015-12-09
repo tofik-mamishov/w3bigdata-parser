@@ -1,6 +1,6 @@
 package com.w3gdata;
 
-import com.w3gdata.actionblocks.ActionBlock;
+import com.w3gdata.actionblock.ActionBlock;
 
 import java.util.ArrayList;
 import java.util.List;

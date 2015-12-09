@@ -1,4 +1,4 @@
-package com.w3gdata.actionblocks;
+package com.w3gdata.actionblock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +23,22 @@ public enum ActionBlockFormat {
     SELECT_SUBGROUP(SelectSubgroup.ID, SelectSubgroup.class),
     SELECT_SUBGROUP_1_14b(SelectSubgroup114b.ID, SelectSubgroup114b.class),
     PRE_SUBSELECTION(PreSubselection.ID, PreSubselection.class),
+    UNKNOWN_0_X_1B(Unknown0x1B.ID, Unknown0x1B.class),
+    SELECT_GROUND_ITEM(SelectGroundItem.ID, SelectGroundItem.class),
+    CANCEL_HERO_REVIVAL(CancelHeroRevival.ID, CancelHeroRevival.class),
+    REMOVE_UNIT_FROM_BUILDING_QUEUE(RemoveUnitFromBuildingQueue.ID, RemoveUnitFromBuildingQueue.class),
+    //SinglePlayerCheats has another way of processing
+    CHANGE_ALLY_OPTIONS(ChangeAllyOptions.ID, ChangeAllyOptions.class),
+    TRANSFER_RESOURCES(TransferResources.ID, TransferResources.class),
+    MAP_TRIGGER_CHAT_COMMAND(MapTriggerChatCommand.ID, MapTriggerChatCommand.class),
+    ESC_PRESSED(EscPressed.ID, EscPressed.class),
+    SCENARIO_TRIGGER(ScenarioTrigger.ID, ScenarioTrigger.class),
+    ENTER_CHOOSE_HERO_SKILL_SUBMENU(EnterChooseHeroSkillSubmenu.ID, EnterChooseHeroSkillSubmenu.class),
+    ENTER_CHOOSE_BUILDING_SUBMENU(EnterChooseBuildingSubmenu.ID, EnterChooseBuildingSubmenu.class),
+    MINIMAP_SIGNAL(MinimapSignal.ID, MinimapSignal.class),
+    CONTINUE_GAME_B(ContinueGameB.ID, ContinueGameB.class),
+    CONTINUE_GAME_A(ContinueGameA.ID, ContinueGameA.class),
+    UNKNOWN_0_X_75(Unknown0x75.ID, Unknown0x75.class)
     ;
 
     final static Map<Integer, ActionBlockFormat> formats;
@@ -47,7 +63,7 @@ public enum ActionBlockFormat {
         return getById(id).type;
     }
 
-    private static ActionBlockFormat getById(int id) {
+    public static ActionBlockFormat getById(int id) {
         return formats.get(id);
     }
 }

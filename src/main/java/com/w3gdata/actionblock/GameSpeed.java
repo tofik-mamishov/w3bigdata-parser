@@ -1,4 +1,4 @@
-package com.w3gdata.actionblocks;
+package com.w3gdata.actionblock;
 
 public class GameSpeed extends ActionBlock {
 

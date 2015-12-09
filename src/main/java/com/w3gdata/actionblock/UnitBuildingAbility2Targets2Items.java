@@ -1,4 +1,4 @@
-package com.w3gdata.actionblocks;
+package com.w3gdata.actionblock;
 
 public class UnitBuildingAbility2Targets2Items extends UnitBuildingAbilityTargeted {
     public static final int ID = 0x14;
