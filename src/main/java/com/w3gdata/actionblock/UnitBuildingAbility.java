@@ -1,6 +1,6 @@
 package com.w3gdata.actionblock;
 
-public class UnitBuildingAbility extends ActionBlock {
+public class UnitBuildingAbility implements ActionBlock {
     public static final int ID = 0x10;
 
     public int itemId;

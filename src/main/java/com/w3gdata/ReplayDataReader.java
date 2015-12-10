@@ -64,30 +64,27 @@ public class ReplayDataReader {
         TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
         timeSlotBlock.n = buf.readWord();
         timeSlotBlock.timeIncrement = buf.readWord();
-        byte[] commandDataBytes = buf.readBytes(timeSlotBlock.n - 2);
-
+        timeSlotBlock.commandDataBlocks = readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 1);
         return timeSlotBlock;
     }
 
-    private Multimap<Byte, CommandData> readCommandDataBlocks(byte[] commandDataBytes) {
+    private Multimap<Byte, CommandData> readCommandDataBlocks(int limit) {
         Multimap<Byte, CommandData> commandDataBlocks = ArrayListMultimap.create();
-        for (int i = 0; i < commandDataBytes.length; i++) {
+        while (buf.getOffset() < limit) {
             CommandData commandData = new CommandData();
-            commandData.playerId = commandDataBytes[i++];
-            commandData.actionBlockLength = ByteUtils.readWord(commandDataBytes, i);
-            commandData.actionBlocks = readActionBlocks(
-                    ByteUtils.readBytes(commandDataBytes, i, commandData.actionBlockLength)
-            );
+            commandData.playerId = buf.readByte();
+            commandData.actionBlockLength = buf.readDWord();
+            commandData.actionBlocks = readActionBlocks(limit);
         }
         return commandDataBlocks;
     }
 
-    private Multimap<Integer, ActionBlock> readActionBlocks(byte[] actionBlocksBytes) {
-        Multimap<Integer, ActionBlock> actionBlocks = ArrayListMultimap.create();
-        for (int i = 0; i < actionBlocksBytes.length; i++) {
-            int id = actionBlocksBytes[i++];
-            //ActionBlockFormat.getTypeById(id);
-            //todo action blocks parsing. Maybe we need to specify concrete types?
+    private Multimap<Byte, ActionBlock> readActionBlocks(int limit) {
+        Multimap<Byte, ActionBlock> actionBlocks = ArrayListMultimap.create();
+        int i = 0;
+        while (buf.getOffset() < limit) {
+            byte id = buf.readByte();
+            actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf.getBuf(), buf.getOffset()));
         }
         return actionBlocks;
     }

@@ -9,7 +9,7 @@ public class CommandData {
 
     public int actionBlockLength;
 
-    public Multimap<Integer, ActionBlock> actionBlocks;
+    public Multimap<Byte, ActionBlock> actionBlocks;
 
     public CommandData() {
         actionBlocks = ArrayListMultimap.create();

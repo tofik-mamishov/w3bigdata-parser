@@ -3,7 +3,7 @@ package com.w3gdata.actionblock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeSelection extends ActionBlock {
+public class ChangeSelection implements ActionBlock {
     public static final int ID = 0x16;
 
     public static final int ADD_TO_SELECTION = 0x01;

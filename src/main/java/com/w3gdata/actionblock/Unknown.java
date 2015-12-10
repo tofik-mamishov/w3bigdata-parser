@@ -1,5 +1,5 @@
 package com.w3gdata.actionblock;
 
-public interface ActionBlock {
+public interface Unknown {
 
 }

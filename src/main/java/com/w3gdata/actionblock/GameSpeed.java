@@ -1,6 +1,6 @@
 package com.w3gdata.actionblock;
 
-public class GameSpeed extends ActionBlock {
+public class GameSpeed implements ActionBlock {
 
     public static final byte SLOW = 0x00;
 

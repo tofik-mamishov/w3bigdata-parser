@@ -1,6 +1,6 @@
 package com.w3gdata.actionblock;
 
-public class ScenarioTrigger extends ActionBlock {
+public class ScenarioTrigger implements ActionBlock {
     public static final int ID = 0x62;
 
     public int unknownA;

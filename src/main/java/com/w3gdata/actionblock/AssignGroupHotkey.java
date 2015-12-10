@@ -3,7 +3,7 @@ package com.w3gdata.actionblock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignGroupHotkey extends ActionBlock {
+public class AssignGroupHotkey implements ActionBlock {
     public static final int ID = 0x17;
 
     public int groupNumber;
