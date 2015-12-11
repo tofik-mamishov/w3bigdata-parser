@@ -84,7 +84,7 @@ public class ReplayDataReader {
         int i = 0;
         while (buf.getOffset() < limit) {
             byte id = buf.readByte();
-            actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf.getBuf(), buf.getOffset()));
+            actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf));
         }
         return actionBlocks;
     }

@@ -7,5 +7,5 @@ public class MapTriggerChatCommand implements ActionBlock {
 
     public int unknownB;
 
-    public byte [] chatCommand;
+    public String chatCommand;
 }

@@ -4,4 +4,8 @@ public class SelectSubgroup implements ActionBlock {
     public static final int ID = 0x19;
 
     public int subgroupNumber;
+
+    public SelectSubgroup(int subgroupNumber) {
+        this.subgroupNumber = subgroupNumber;
+    }
 }

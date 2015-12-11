@@ -10,5 +10,9 @@ public class GameSpeed implements ActionBlock {
 
     public static final int ID = 0x03;
 
-    public byte speed;
+    public int speed;
+
+    public GameSpeed(int speed) {
+        this.speed = speed;
+    }
 }
