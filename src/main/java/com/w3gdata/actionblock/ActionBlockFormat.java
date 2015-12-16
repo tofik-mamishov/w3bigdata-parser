@@ -184,13 +184,12 @@ public enum ActionBlockFormat {
     UNKNOWN_0_X_1B(Unknown0x1B.ID, Unknown0x1B.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new Unknown0x1B();
+            return new Unknown0x1B().skip(buf);
         }
     },
     SELECT_GROUND_ITEM(SelectGroundItem.ID, SelectGroundItem.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             SelectGroundItem selectGroundItem = new SelectGroundItem();
             selectGroundItem.unknown = buf.readByte();
             selectGroundItem.objPair = new ObjPair(buf.readDWord(), buf.readDWord());
@@ -200,7 +199,6 @@ public enum ActionBlockFormat {
     CANCEL_HERO_REVIVAL(CancelHeroRevival.ID, CancelHeroRevival.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             CancelHeroRevival cancelHeroRevival = new CancelHeroRevival();
             cancelHeroRevival.unitPair = new ObjPair(buf.readDWord(), buf.readDWord());
             return cancelHeroRevival;
@@ -209,7 +207,6 @@ public enum ActionBlockFormat {
     REMOVE_UNIT_FROM_BUILDING_QUEUE(RemoveUnitFromBuildingQueue.ID, RemoveUnitFromBuildingQueue.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             RemoveUnitFromBuildingQueue removeUnitFromBuildingQueue = new RemoveUnitFromBuildingQueue();
             removeUnitFromBuildingQueue.slotNumber = buf.readByte();
             removeUnitFromBuildingQueue.itemId = buf.readDWord();
@@ -219,7 +216,7 @@ public enum ActionBlockFormat {
     UNKNOWN_0_X_21(Unknown0x21.ID, Unknown0x21.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new Unknown0x21();
+            return new Unknown0x21().skip(buf);
         }
     },
     //SinglePlayerCheats has another way of processing
@@ -271,21 +268,18 @@ public enum ActionBlockFormat {
     ENTER_CHOOSE_HERO_SKILL_SUBMENU(EnterChooseHeroSkillSubmenu.ID, EnterChooseHeroSkillSubmenu.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             return new EnterChooseHeroSkillSubmenu();
         }
     },
     ENTER_CHOOSE_BUILDING_SUBMENU(EnterChooseBuildingSubmenu.ID, EnterChooseBuildingSubmenu.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             return new EnterChooseBuildingSubmenu();
         }
     },
     MINIMAP_SIGNAL(MinimapSignal.ID, MinimapSignal.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            buf.increment(1);
             MinimapSignal minimapSignal = new MinimapSignal();
             minimapSignal.locationX = buf.readDWord();
             minimapSignal.locationY = buf.readDWord();
@@ -296,19 +290,19 @@ public enum ActionBlockFormat {
     CONTINUE_GAME_B(ContinueGameB.ID, ContinueGameB.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new ContinueGameB();
+            return new ContinueGameB().skip(buf);
         }
     },
     CONTINUE_GAME_A(ContinueGameA.ID, ContinueGameA.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new ContinueGameA();
+            return new ContinueGameA().skip(buf);
         }
     },
     UNKNOWN_0_X_75(Unknown0x75.ID, Unknown0x75.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new Unknown0x75();
+            return new Unknown0x75().skip(buf);
         }
     };
 
