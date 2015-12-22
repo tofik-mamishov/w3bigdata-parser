@@ -16,6 +16,8 @@ public class W3gInfo {
     public GameStartRecord gameStartRecord = new GameStartRecord();
     public List<LeaveGameRecord> leaveGameRecords;
     public List<ForcedGameEndCountdownRecord> forcedGameEndCountdownRecords;
+    public List<TimeSlotBlock> timeSlotBlocks;
+    public List<PlayerChatMessage> playerChatMessages;
 
     private List<PlayerRecord> playerRecords;
 
@@ -34,6 +36,8 @@ public class W3gInfo {
         leaveGameRecords = new ArrayList<>();
         replayInformation = new ReplayInformation();
         forcedGameEndCountdownRecords = new ArrayList<>();
+        timeSlotBlocks = new ArrayList<>();
+        playerChatMessages = new ArrayList<>();
     }
 
     public List<PlayerRecord> getPlayerRecords() {

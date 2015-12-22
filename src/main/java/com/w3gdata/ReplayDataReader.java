@@ -29,7 +29,6 @@ public class ReplayDataReader {
                 }
             }
         }
-        //todo continued...
     }
 
     private void processBlockByFormat(ReplayDataFormat replayDataFormat) {
@@ -37,10 +36,10 @@ public class ReplayDataReader {
             data.leaveGameRecords.add(readLeaveGameRecord());
         } else if (replayDataFormat == FORCED_GAME_END_COUNTDOWN) {
             data.forcedGameEndCountdownRecords.add(readForcedGameEndCountdownRecord());
-        } else if (replayDataFormat == TIME_SLOT_BLOCK_OLD || replayDataFormat == TIME_SLOT_BLOCK_NEW) {
-
+        } else if (replayDataFormat == TIME_SLOT_BLOCK_NEW) {
+            data.timeSlotBlocks.add(readTimeBlock());
         } else if (replayDataFormat == PLAYER_CHAT_MESSAGE) {
-
+            data.playerChatMessages.add(readPlayerChatMessage());
         }
     }
 
@@ -87,5 +86,15 @@ public class ReplayDataReader {
             actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf));
         }
         return actionBlocks;
+    }
+
+    private PlayerChatMessage readPlayerChatMessage() {
+        PlayerChatMessage result = new PlayerChatMessage();
+        result.playerId = buf.readByte();
+        result.n = buf.readWord();
+        result.flag = buf.readByte();
+        result.chatMode = buf.readDWord();
+        result.message = buf.readNullTerminatedString();
+        return result;
     }
 }
