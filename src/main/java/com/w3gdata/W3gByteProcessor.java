@@ -32,6 +32,7 @@ public class W3gByteProcessor {
         data.languageId = decompressed.readDWord();
         readPlayerList();
         readGameStartRecord();
+        readReplayData();
         return data;
     }
 
@@ -114,5 +115,10 @@ public class W3gByteProcessor {
         data.replayInformation.subHeader.buildNumber = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
         data.replayInformation.subHeader.flags = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
         data.replayInformation.subHeader.timeLength = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
+    }
+
+    private void readReplayData() {
+        ReplayDataReader reader = new ReplayDataReader(data, decompressed);
+        reader.read();
     }
 }

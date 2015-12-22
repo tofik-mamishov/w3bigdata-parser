@@ -20,12 +20,13 @@ public class ReplayDataReader {
 
     public void read() {
         while(buf.hasNext()) {
-            ReplayDataFormat replayDataFormat = getById(buf.peek());
+            int replayDataId = buf.readByte();
+            ReplayDataFormat replayDataFormat = getById(replayDataId);
             if (replayDataFormat != null) {
                 if (replayDataFormat.isKnown) {
                     processBlockByFormat(replayDataFormat);
                 } else {
-                    buf.increment(replayDataFormat.fixedSize);
+                    buf.increment(replayDataFormat.fixedSize - 1);
                 }
             }
         }
@@ -62,8 +63,10 @@ public class ReplayDataReader {
     private TimeSlotBlock readTimeBlock() {
         TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
         timeSlotBlock.n = buf.readWord();
-        timeSlotBlock.timeIncrement = buf.readWord();
-        timeSlotBlock.commandDataBlocks = readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 1);
+        if (timeSlotBlock.n != 2) {
+            timeSlotBlock.timeIncrement = buf.readWord();
+            timeSlotBlock.commandDataBlocks = readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 1);
+        }
         return timeSlotBlock;
     }
 
@@ -72,7 +75,7 @@ public class ReplayDataReader {
         while (buf.getOffset() < limit) {
             CommandData commandData = new CommandData();
             commandData.playerId = buf.readByte();
-            commandData.actionBlockLength = buf.readDWord();
+            commandData.actionBlockLength = buf.readWord();
             commandData.actionBlocks = readActionBlocks(limit);
         }
         return commandDataBlocks;
@@ -80,7 +83,6 @@ public class ReplayDataReader {
 
     private Multimap<Byte, ActionBlock> readActionBlocks(int limit) {
         Multimap<Byte, ActionBlock> actionBlocks = ArrayListMultimap.create();
-        int i = 0;
         while (buf.getOffset() < limit) {
             byte id = buf.readByte();
             actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf));

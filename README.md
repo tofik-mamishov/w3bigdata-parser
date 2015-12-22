@@ -16,3 +16,9 @@ Statistics data must represent (but not limited to):
 Description of format is here: http://w3g.deepnode.de/files/w3g_format.txt
 
 Description of action blocs is here: http://w3g.deepnode.de/files/w3g_actions.txt
+
+##New blocks
+* 107(0x6B): 77 77 68 46 68 
+* 116(0x74): 0 118
+* 108(0x6C) 58 57 57 57 48 0 
+                

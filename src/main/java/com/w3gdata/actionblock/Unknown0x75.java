@@ -5,10 +5,8 @@ public class Unknown0x75 implements Unknown {
 
     public int unknown;
 
-    public static final int SIZE = 2;//because unknown
-
     @Override
     public int getSize() {
-        return SIZE;
+        return 2;
     }
 }
