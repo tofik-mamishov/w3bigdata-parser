@@ -299,6 +299,24 @@ public enum ActionBlockFormat {
             return new ContinueGameA().skip(buf);
         }
     },
+    UNKNOWN_0_X_6B(Unknown0x6B.ID, Unknown0x6B.class) {
+        @Override
+        public ActionBlock process(ByteBuffer buf) {
+            return new Unknown0x6B().skip(buf);
+        }
+    },
+    UNKNOWN_0_X_6C(Unknown0x6C.ID, Unknown0x6C.class) {
+        @Override
+        public ActionBlock process(ByteBuffer buf) {
+            return new Unknown0x6C().skip(buf);
+        }
+    },
+    UNKNOWN_0_X_74(Unknown0x74.ID, Unknown0x74.class) {
+        @Override
+        public ActionBlock process(ByteBuffer buf) {
+            return new Unknown0x74().skip(buf);
+        }
+    },
     UNKNOWN_0_X_75(Unknown0x75.ID, Unknown0x75.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
