@@ -41,6 +41,14 @@ public final class ByteUtils {
         }
     }
 
+    public static void debugToFile(byte[] decompressed, int offset, int len, String fileName) {
+        try (FileOutputStream fos = new FileOutputStream(fileName)) {
+            fos.write(decompressed, offset, len);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static byte[] readBytes(byte[] buf, int offset, int n) {
         byte[] result = new byte[n];
         for (int i = 0; i < n; i++) {

@@ -50,7 +50,7 @@ public class ByteBuffer {
 
     public int findNullTermination() {
         int i = offset;
-        while(buf[i++] != 0);
+        while (buf[i++] != 0) ;
         return i - 1;
     }
 
@@ -63,5 +63,12 @@ public class ByteBuffer {
 
     public boolean hasNext() {
         return offset < buf.length;
+    }
+
+    public void debugWhatIsLeftToFile() {
+        ByteUtils.debugToFile(getBuf(),
+                getOffset(),
+                getBuf().length - getOffset(),
+                "decompressed.bin");
     }
 }
