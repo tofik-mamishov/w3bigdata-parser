@@ -107,7 +107,7 @@ public class W3gByteProcessor {
         data.replayInformation.header.size = ByteUtils.readDWord(buf, HEADER_COMPRESSED_FILE_SIZE_OFFSET);
         data.replayInformation.header.headerVersion = ByteUtils.readDWord(buf, HEADER_FILE_VERSION_OFFSET);
         if (data.replayInformation.header.headerVersion != 0x01) {
-            throw new ProcessorException("Old replays are not supported!");
+            throw new W3gParserException("Old replays are not supported!");
         }
 
         logger.info("Reading sub header information...");

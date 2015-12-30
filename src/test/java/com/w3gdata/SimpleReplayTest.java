@@ -27,11 +27,14 @@ public class SimpleReplayTest {
         replaySourceFile = Resources.asByteSource(resourceURL);
         parser = new W3gParser();
         w3gInfo = parser.parse(replaySourceFile);
+        assertNotNull(w3gInfo);
     }
 
     @Test
-    public void testParseHeader() throws Exception {
-        assertNotNull(w3gInfo);
+    public void expectHavingPauseAction() throws Exception {
+
+
+
     }
 
 

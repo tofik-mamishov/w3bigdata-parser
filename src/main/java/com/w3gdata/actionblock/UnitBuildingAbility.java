@@ -1,7 +1,7 @@
 package com.w3gdata.actionblock;
 
 public class UnitBuildingAbility implements ActionBlock {
-    public static final int ID = 0x10;
+    public static final byte ID = 0x10;
 
     public int itemId;
 

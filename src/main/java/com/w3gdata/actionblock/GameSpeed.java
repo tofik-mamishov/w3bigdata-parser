@@ -8,7 +8,7 @@ public class GameSpeed implements ActionBlock {
 
     public static final byte FAST = 0x02;
 
-    public static final int ID = 0x03;
+    public static final byte ID = 0x03;
 
     public int speed;
 

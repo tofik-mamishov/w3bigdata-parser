@@ -1,5 +1,7 @@
 package com.w3gdata;
 
+import com.google.common.collect.FluentIterable;
+import com.w3gdata.actionblock.ActionBlock;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -38,6 +40,10 @@ public class W3gInfo {
         forcedGameEndCountdownRecords = new ArrayList<>();
         timeSlotBlocks = new ArrayList<>();
         playerChatMessages = new ArrayList<>();
+    }
+
+    public List<ActionBlock> getAllActionBlocks() {
+        FluentIterable.from(timeSlotBlocks).
     }
 
     public List<PlayerRecord> getPlayerRecords() {

@@ -66,8 +66,7 @@ public class ByteBuffer {
     }
 
     public void debugWhatIsLeftToFile() {
-        ByteUtils.debugToFile(getBuf(),
-                getOffset(),
+        ByteUtils.debugToFile(getBuf(), getOffset(),
                 getBuf().length - getOffset(),
                 "decompressed.bin");
     }

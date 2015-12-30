@@ -44,7 +44,7 @@ public class DataBlockReader {
             }
             return result;
         } catch (DataFormatException e) {
-            throw new ProcessorException(e.getMessage(), e);
+            throw new W3gParserException(e.getMessage(), e);
         }
     }
 
@@ -96,7 +96,7 @@ public class DataBlockReader {
         if (err != JZlib.Z_OK) {
             if (z.msg != null) logger.error(z.msg + " ");
             logger.error(msg + " error: " + err);
-            throw new ProcessorException(msg + " error: " + err);
+            throw new W3gParserException(msg + " error: " + err);
         }
     }
 

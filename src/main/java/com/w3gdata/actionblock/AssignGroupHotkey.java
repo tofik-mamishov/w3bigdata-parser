@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssignGroupHotkey implements ActionBlock {
-    public static final int ID = 0x17;
+    public static final byte ID = 0x17;
 
     public int groupNumber;
 

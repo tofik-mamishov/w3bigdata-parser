@@ -7,9 +7,12 @@ import com.google.common.collect.Multimap;
 import com.w3gdata.actionblock.ActionBlock;
 import com.w3gdata.actionblock.ActionBlockFormat;
 import com.w3gdata.util.ByteBuffer;
-import com.w3gdata.util.ByteUtils;
+import org.apache.log4j.Logger;
 
 public class ReplayDataReader {
+
+    private static final Logger logger = Logger.getLogger(ReplayDataReader.class);
+
     private final W3gInfo data;
     private final ByteBuffer buf;
 
@@ -20,16 +23,22 @@ public class ReplayDataReader {
     }
 
     public void read() {
-        while(buf.hasNext()) {
-            int replayDataId = buf.readByte();
-            ReplayDataFormat replayDataFormat = getById(replayDataId);
-            if (replayDataFormat != null) {
-                if (replayDataFormat.isKnown) {
-                    processBlockByFormat(replayDataFormat);
-                } else {
-                    buf.increment(replayDataFormat.fixedSize - 1);
+        try {
+            while(buf.hasNext()) {
+                int replayDataId = buf.readByte();
+                ReplayDataFormat replayDataFormat = getById(replayDataId);
+                if (replayDataFormat != null) {
+                    if (replayDataFormat.isKnown) {
+                        processBlockByFormat(replayDataFormat);
+                    } else {
+                        buf.increment(replayDataFormat.fixedSize - 1);
+                    }
                 }
             }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+//            buf.debugWhatIsLeftToFile();
+            throw new W3gParserException(e);
         }
     }
 
@@ -64,9 +73,11 @@ public class ReplayDataReader {
     private TimeSlotBlock readTimeBlock() {
         TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
         timeSlotBlock.n = buf.readWord();
+        timeSlotBlock.timeIncrement = buf.readWord();
         if (timeSlotBlock.n != 2) {
-            timeSlotBlock.timeIncrement = buf.readWord();
-            timeSlotBlock.commandDataBlocks = readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 1);
+            //Please do not approach!
+            timeSlotBlock.commandDataBlocks =
+                    readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 2);
         }
         return timeSlotBlock;
     }
@@ -77,7 +88,7 @@ public class ReplayDataReader {
             CommandData commandData = new CommandData();
             commandData.playerId = buf.readByte();
             commandData.actionBlockLength = buf.readWord();
-            commandData.actionBlocks = readActionBlocks(limit);
+            commandData.actionBlocks = readActionBlocks(commandData.actionBlockLength + buf.getOffset());
         }
         return commandDataBlocks;
     }
