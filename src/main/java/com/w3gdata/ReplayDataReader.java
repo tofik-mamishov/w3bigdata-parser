@@ -101,7 +101,9 @@ public class ReplayDataReader {
         Multimap<Byte, ActionBlock> actionBlocks = ArrayListMultimap.create();
         while (buf.getOffset() < limit) {
             byte id = buf.readByte();
-            actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf));
+            ActionBlockFormat actionBlockFormat = ActionBlockFormat.getById(id);
+            logger.info("Add action: " + actionBlockFormat.name());
+            actionBlocks.put(id, actionBlockFormat.process(buf));
         }
         return actionBlocks;
     }

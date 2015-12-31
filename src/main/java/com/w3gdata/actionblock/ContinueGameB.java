@@ -5,7 +5,7 @@ public class ContinueGameB implements Unknown {
 
     public static final int ADDITIONAL_BYTE = 0x68;//for WarCraft III patch version <= 1.06
 
-    public static final int SIZE = 17;
+    public static final int SIZE = 16;
 
     @Override
     public int getSize() {

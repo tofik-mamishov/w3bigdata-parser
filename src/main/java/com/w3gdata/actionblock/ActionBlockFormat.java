@@ -299,10 +299,15 @@ public enum ActionBlockFormat {
             return new ContinueGameA().skip(buf);
         }
     },
-    UNKNOWN_0_X_6B(Unknown0x6B.ID, Unknown0x6B.class) {
+    UNKNOWN_0_X_6B(MMDMessage.ID, MMDMessage.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
-            return new Unknown0x6B().skip(buf);
+            MMDMessage block = new MMDMessage();
+            block.name = buf.readNullTerminatedString();
+            block.checksum = buf.readNullTerminatedString();
+            block.secondChecksum = buf.readNullTerminatedString();
+            block.weakChecksum = buf.readDWord();
+            return block;
         }
     },
     UNKNOWN_0_X_6C(Unknown0x6C.ID, Unknown0x6C.class) {
