@@ -1,13 +1,13 @@
 package com.w3gdata;
 
-import static com.w3gdata.ReplayDataFormat.*;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.w3gdata.actionblock.ActionBlock;
 import com.w3gdata.actionblock.ActionBlockFormat;
 import com.w3gdata.util.ByteBuffer;
 import org.apache.log4j.Logger;
+
+import static com.w3gdata.ReplayDataFormat.*;
 
 public class ReplayDataReader {
 
@@ -89,6 +89,7 @@ public class ReplayDataReader {
             commandData.playerId = buf.readByte();
             commandData.actionBlockLength = buf.readWord();
             commandData.actionBlocks = readActionBlocks(commandData.actionBlockLength + buf.getOffset());
+            commandDataBlocks.put(commandData.playerId, commandData);
         }
         return commandDataBlocks;
     }

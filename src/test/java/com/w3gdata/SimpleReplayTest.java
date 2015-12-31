@@ -2,16 +2,17 @@ package com.w3gdata;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
-import org.junit.Before;
+import com.w3gdata.actionblock.ActionBlock;
+import com.w3gdata.actionblock.PauseGame;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.URL;
-import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 public class SimpleReplayTest {
 
@@ -32,9 +33,9 @@ public class SimpleReplayTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-
-
-
+        List<ActionBlock> allActionBlocks = w3gInfo.getAllActionBlocks();
+        Optional<ActionBlock> pauseGame = allActionBlocks.stream().filter(a -> a instanceof PauseGame).findFirst();
+        assertTrue(pauseGame.isPresent());
     }
 
 

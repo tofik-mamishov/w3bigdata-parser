@@ -15,7 +15,7 @@ public class W3gParserTest {
 
     private static final Logger logger = Logger.getLogger(W3gParserTest.class);
 
-    private static final String REPLAY_SOURCE_FILE_NAME = "w3replayTestFile.w3g";
+    private static final String REPLAY_SOURCE_FILE_NAME = "test.w3g";
 
     private static final int EXPECTED_PLAYERS_NUMBER = 2;
 

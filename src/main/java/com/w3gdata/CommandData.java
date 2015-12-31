@@ -14,4 +14,28 @@ public class CommandData {
     public CommandData() {
         actionBlocks = ArrayListMultimap.create();
     }
+
+    public byte getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(byte playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getActionBlockLength() {
+        return actionBlockLength;
+    }
+
+    public void setActionBlockLength(int actionBlockLength) {
+        this.actionBlockLength = actionBlockLength;
+    }
+
+    public Multimap<Byte, ActionBlock> getActionBlocks() {
+        return actionBlocks;
+    }
+
+    public void setActionBlocks(Multimap<Byte, ActionBlock> actionBlocks) {
+        this.actionBlocks = actionBlocks;
+    }
 }

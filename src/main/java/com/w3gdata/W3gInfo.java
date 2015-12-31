@@ -1,6 +1,5 @@
 package com.w3gdata;
 
-import com.google.common.collect.FluentIterable;
 import com.w3gdata.actionblock.ActionBlock;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -9,6 +8,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class W3gInfo {
 
@@ -43,7 +43,10 @@ public class W3gInfo {
     }
 
     public List<ActionBlock> getAllActionBlocks() {
-        FluentIterable.from(timeSlotBlocks).
+        return timeSlotBlocks.stream()
+                .flatMap(t -> t.getCommandDataBlocks().values().stream())
+                .flatMap(cd -> cd.getActionBlocks().values().stream())
+                .collect(Collectors.toList());
     }
 
     public List<PlayerRecord> getPlayerRecords() {
