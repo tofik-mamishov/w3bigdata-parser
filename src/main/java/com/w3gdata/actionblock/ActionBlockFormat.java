@@ -144,9 +144,12 @@ public enum ActionBlockFormat {
             AssignGroupHotkey assignGroupHotkey = new AssignGroupHotkey();
             assignGroupHotkey.groupNumber = buf.readByte();
             assignGroupHotkey.selectedObjNumber = buf.readWord();
-            int limit = buf.getOffset() + assignGroupHotkey.selectedObjNumber;
+            int limit = buf.getOffset() + assignGroupHotkey.selectedObjNumber * 4 * 2;
             while (buf.getOffset() < limit) {
-                assignGroupHotkey.selectedObjs.add(new ObjPair(buf.readDWord(), buf.readDWord()));
+                ObjPair pair = new ObjPair();
+                pair.objectId1 = buf.readDWord();
+                pair.objectId2 = buf.readDWord();
+                assignGroupHotkey.selectedObjs.add(pair);
             }
             return assignGroupHotkey;
         }
@@ -328,6 +331,7 @@ public enum ActionBlockFormat {
             return new Unknown0x75().skip(buf);
         }
     };
+
 
     final static Map<Integer, ActionBlockFormat> formats;
 

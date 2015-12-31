@@ -102,7 +102,6 @@ public class ReplayDataReader {
         while (buf.getOffset() < limit) {
             byte id = buf.readByte();
             ActionBlockFormat actionBlockFormat = ActionBlockFormat.getById(id);
-            logger.info("Add action: " + actionBlockFormat.name());
             actionBlocks.put(id, actionBlockFormat.process(buf));
         }
         return actionBlocks;
