@@ -11,4 +11,9 @@ public class ContinueGameB implements Unknown {
     public int getSize() {
         return SIZE;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

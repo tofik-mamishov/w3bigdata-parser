@@ -6,4 +6,9 @@ public class ChangeAllyOptions implements ActionBlock {
     public int playerSlotNumber;
 
     public int flags;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -7,4 +7,9 @@ public class Unknown0x6C implements Unknown {
     public int getSize() {
         return 6;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

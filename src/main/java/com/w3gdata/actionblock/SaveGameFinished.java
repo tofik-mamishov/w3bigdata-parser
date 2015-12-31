@@ -8,4 +8,9 @@ public class SaveGameFinished implements ActionBlock {
     public SaveGameFinished(int unknown) {
         this.unknown = unknown;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -8,4 +8,9 @@ public class SelectSubgroup implements ActionBlock {
     public SelectSubgroup(int subgroupNumber) {
         this.subgroupNumber = subgroupNumber;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

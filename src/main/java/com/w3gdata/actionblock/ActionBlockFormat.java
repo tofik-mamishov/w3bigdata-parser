@@ -128,12 +128,12 @@ public enum ActionBlockFormat {
             ChangeSelection changeSelection = new ChangeSelection();
             changeSelection.selectMode = buf.readByte();
             changeSelection.unitsBuildingsNumber = buf.readWord();
-            int limit = buf.getOffset() + changeSelection.unitsBuildingsNumber;
+            int limit = buf.getOffset() + changeSelection.unitsBuildingsNumber * 4 * 2;
             while (buf.getOffset() < limit) {
                 ObjPair pair = new ObjPair();
                 pair.objectId1 = buf.readDWord();
                 pair.objectId2 = buf.readDWord();
-                changeSelection.selectedObjs.add(new ObjPair(buf.readDWord(), buf.readDWord()));
+                changeSelection.selectedObjs.add(pair);
             }
             return changeSelection;
         }

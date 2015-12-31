@@ -6,4 +6,9 @@ public class SelectSubgroup114b implements ActionBlock {
     public int itemId;
 
     public ObjPair objPair;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

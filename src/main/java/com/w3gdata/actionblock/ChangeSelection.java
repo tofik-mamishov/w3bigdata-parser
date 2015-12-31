@@ -19,4 +19,9 @@ public class ChangeSelection implements ActionBlock {
     public ChangeSelection() {
         selectedObjs = new ArrayList<>(unitsBuildingsNumber);
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

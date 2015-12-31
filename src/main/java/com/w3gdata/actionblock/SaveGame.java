@@ -7,4 +7,9 @@ public class SaveGame implements ActionBlock {
     public SaveGame(String saveGameName) {
         this.saveGameName = saveGameName;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -15,4 +15,9 @@ public class GameSpeed implements ActionBlock {
     public GameSpeed(int speed) {
         this.speed = speed;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

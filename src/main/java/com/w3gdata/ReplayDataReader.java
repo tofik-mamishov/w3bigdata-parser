@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.w3gdata.actionblock.ActionBlock;
 import com.w3gdata.actionblock.ActionBlockFormat;
 import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import static com.w3gdata.ReplayDataFormat.*;
@@ -36,8 +37,10 @@ public class ReplayDataReader {
                 }
             }
         } catch (Exception e) {
+            logger.error("Failed on offset: " + buf.getOffset());
             logger.error(e.getMessage(), e);
-//            buf.debugWhatIsLeftToFile();
+
+            ByteUtils.debugToFile(buf.getBuf(), "full.bin");
             throw new W3gParserException(e);
         }
     }

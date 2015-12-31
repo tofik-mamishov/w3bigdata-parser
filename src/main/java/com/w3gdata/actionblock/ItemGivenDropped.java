@@ -10,4 +10,9 @@ public class ItemGivenDropped extends UnitBuildingAbilityTargeted {
     public int itemObjId1;
 
     public int itemObjId2;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

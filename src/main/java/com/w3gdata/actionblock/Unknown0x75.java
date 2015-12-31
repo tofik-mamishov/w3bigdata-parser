@@ -9,4 +9,9 @@ public class Unknown0x75 implements Unknown {
     public int getSize() {
         return 2;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

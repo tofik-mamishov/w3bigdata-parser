@@ -1,9 +1,14 @@
 package com.w3gdata.actionblock;
 
 public class SelectGroupHotkey implements ActionBlock {
-    public static final int ID = 0x178;
+    public static final int ID = 0x18;
 
     public int groupNumber;
 
     public int unknown;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

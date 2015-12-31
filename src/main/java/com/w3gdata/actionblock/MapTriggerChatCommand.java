@@ -8,4 +8,9 @@ public class MapTriggerChatCommand implements ActionBlock {
     public int unknownB;
 
     public String chatCommand;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -6,4 +6,9 @@ public class UnitBuildingAbilityTargetedId extends UnitBuildingAbilityTargeted {
     public int objId1;
 
     public int objId2;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

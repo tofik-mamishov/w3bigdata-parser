@@ -8,4 +8,9 @@ public class ScenarioTrigger implements ActionBlock {
     public int unknownB;
 
     public int unknownCounter;//only present for patch version >= 1.07
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

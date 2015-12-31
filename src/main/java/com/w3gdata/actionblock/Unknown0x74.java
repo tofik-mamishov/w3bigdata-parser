@@ -8,4 +8,9 @@ public class Unknown0x74 implements Unknown {
     public int getSize() {
         return 2;
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

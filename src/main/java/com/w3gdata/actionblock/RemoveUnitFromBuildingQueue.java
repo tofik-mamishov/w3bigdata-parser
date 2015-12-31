@@ -8,4 +8,9 @@ public class RemoveUnitFromBuildingQueue implements ActionBlock {
     public int slotNumber;
 
     public int itemId;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

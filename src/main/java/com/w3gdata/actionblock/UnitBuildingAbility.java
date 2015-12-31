@@ -10,4 +10,9 @@ public class UnitBuildingAbility implements ActionBlock {
     public int unknownA;//only present for patch version >= 1.07
 
     public int unknownB;//only present for patch version >= 1.07
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

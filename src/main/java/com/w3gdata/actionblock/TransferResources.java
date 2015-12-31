@@ -8,4 +8,9 @@ public class TransferResources implements ActionBlock {
     public int goldToTransfer;
 
     public int lumberToTransfer;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -8,4 +8,9 @@ public class SelectGroundItem implements ActionBlock {
     public int unknown;
 
     public ObjPair objPair;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -15,4 +15,9 @@ public class AssignGroupHotkey implements ActionBlock {
     public AssignGroupHotkey() {
         selectedObjs = new ArrayList<>(selectedObjNumber);
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

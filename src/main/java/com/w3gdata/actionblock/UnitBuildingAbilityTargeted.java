@@ -6,4 +6,9 @@ public class UnitBuildingAbilityTargeted extends UnitBuildingAbility {
     public int targetX;
 
     public int targetY;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

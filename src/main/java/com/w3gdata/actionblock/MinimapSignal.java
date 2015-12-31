@@ -10,4 +10,9 @@ public class MinimapSignal implements ActionBlock {
     public int locationY;
 
     public int unknown;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }

@@ -16,4 +16,9 @@ public class UnitBuildingAbility2Targets2Items extends UnitBuildingAbilityTarget
     public UnitBuildingAbility2Targets2Items() {
         unknownBytes = new byte[9];
     }
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 }
