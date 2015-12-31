@@ -15,7 +15,7 @@ public class LongReplayTest extends ParsingTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-        ImmutableList<ActionBlock> actionBlocks = actions.get(ActionBlockFormat.PAUSE_GAME);
+        ImmutableList<ActionBlock> actionBlocks = actions.get(ActionBlockFormat.ASSIGN_GROUP_HOTKEY);
         assertFalse(actionBlocks.isEmpty());
     }
 }
