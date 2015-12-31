@@ -88,7 +88,6 @@ public class W3gByteProcessor {
     private void readGameSettings() {
         int currentOffset = decompressed.getOffset();
         byte[] decoded = new EncodedStringDecoder().decode(decompressed.getBuf(), currentOffset, decompressed.findNullTermination() - currentOffset);
-        decompressed.increment(decoded.length + 1);
         int pos = 0;
         data.gameSettings.speed = decoded[pos++];
         data.gameSettings.visibilityRules = decoded[pos++];
@@ -98,6 +97,7 @@ public class W3gByteProcessor {
         data.gameSettings.mapName = ByteUtils.readNullTerminatedString(decoded, pos);
         pos += data.gameSettings.mapName.length() + 1;
         data.gameSettings.creatorName = ByteUtils.readNullTerminatedString(decoded, pos);
+        decompressed.increment(decoded.length + 1);
     }
 
 

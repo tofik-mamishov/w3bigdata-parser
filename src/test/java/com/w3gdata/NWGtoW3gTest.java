@@ -15,7 +15,7 @@ public class NWGtoW3gTest {
 
     @Test
     public void convertNwgTow3G() throws Exception {
-        String name = "09_38_19_005";
+        String name = "long";
         URL resourceURL = Resources.getResource(name + ".nwg");
         ByteSource replaySourceFile = Resources.asByteSource(resourceURL);
         byte[] bytes = replaySourceFile.read();

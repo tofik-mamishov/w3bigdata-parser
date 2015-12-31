@@ -36,6 +36,7 @@ public abstract class ParsingTest {
             List<ActionBlock> allActionBlocks = w3gInfo.getAllActionBlocks();
             actions = Multimaps.index(allActionBlocks, actionBlock -> ActionBlockFormat.getById(actionBlock.getId()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             fail("Couldn't parse " + name);
         }
         assertNotNull(w3gInfo);

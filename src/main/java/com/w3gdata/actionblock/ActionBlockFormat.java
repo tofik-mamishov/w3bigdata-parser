@@ -313,6 +313,18 @@ public enum ActionBlockFormat {
             return block;
         }
     },
+    UNKNOWN_0_X_94(Unknown0x94.ID, Unknown0x94.class) {
+        @Override
+        public ActionBlock process(ByteBuffer buf) {
+            return new Unknown0x94().skip(buf);
+        }
+    },
+    UNKNOWN_0_X_9C(Unknown0x92.ID, Unknown0x92.class) {
+        @Override
+        public ActionBlock process(ByteBuffer buf) {
+            return new Unknown0x92().skip(buf);
+        }
+    },
     UNKNOWN_0_X_6C(Unknown0x6C.ID, Unknown0x6C.class) {
         @Override
         public ActionBlock process(ByteBuffer buf) {
