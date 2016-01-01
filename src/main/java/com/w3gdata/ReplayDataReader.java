@@ -39,7 +39,6 @@ public class ReplayDataReader {
         } catch (Exception e) {
             logger.error("Failed on offset: " + buf.getOffset());
             logger.error(e.getMessage(), e);
-
             ByteUtils.debugToFile(buf.getBuf(), "full.bin");
             throw new W3gParserException(e);
         }
@@ -102,7 +101,6 @@ public class ReplayDataReader {
         while (buf.getOffset() < limit) {
             int id = buf.readByte();
             ActionBlockFormat actionBlockFormat = ActionBlockFormat.getById(id);
-            logger.info("Block: " + actionBlockFormat.name());
             actionBlocks.put((byte)id, actionBlockFormat.process(buf));
         }
         return actionBlocks;

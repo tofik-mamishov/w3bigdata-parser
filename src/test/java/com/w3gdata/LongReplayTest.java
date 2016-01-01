@@ -10,7 +10,7 @@ import static org.junit.Assert.assertFalse;
 public class LongReplayTest extends ParsingTest {
 
     public LongReplayTest() {
-        super("11_09_51_024.w3g");
+        super("long.w3g");
     }
 
     @Test

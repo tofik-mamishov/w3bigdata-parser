@@ -22,6 +22,9 @@ public class W3gByteProcessor {
     public W3gInfo process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
         DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
+        ByteUtils.debugToFile(buf, data.replayInformation.header.firstDataBlockOffset,
+                buf.length - data.replayInformation.header.firstDataBlockOffset, "only_data_blocks_compressed.bin");
+
         decompressed = new ByteBuffer(reader.decompress(), PLAYER_RECORD_OFFSET);
         data.host = readPlayerRecord();
         data.gameName = decompressed.readNullTerminatedString();

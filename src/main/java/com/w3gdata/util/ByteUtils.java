@@ -18,6 +18,22 @@ public final class ByteUtils {
         return (buf[offset + 1] & 0xFF) << 8 | (buf[offset] & 0xFF);
     }
 
+    public static void writeWord(byte[] buf, int offset, int value) {
+        buf[offset + 1] = (byte) ((value >> 8) & 0xFF);
+        buf[offset] = (byte) (value & 0xFF);
+    }
+
+    public static void writeDWord(byte[] buf, int offset, int value) {
+        buf[offset + 3] = (byte) ((value >> 24) & 0xFF);
+        buf[offset + 2] = (byte) ((value >> 16) & 0xFF);
+        buf[offset + 1] = (byte) ((value >> 8) & 0xFF);
+        buf[offset] = (byte) (value & 0xFF);
+    }
+
+    public static void writeBytes(byte[] where, int offset, byte[] what) {
+        System.arraycopy(what, 0, where, offset, what.length);
+    }
+
     public static String readString(byte[] buf, int offset, int len) {
         return new String(buf, offset, len, Charset.defaultCharset());
     }
