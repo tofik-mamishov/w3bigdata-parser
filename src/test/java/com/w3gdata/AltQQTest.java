@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class AltQQTest extends ParsingTest {
 
     public AltQQTest() {
-        super("altqq.w3g");
+        super("altqq_fadzu.w3g");
     }
 
     @Test
@@ -20,6 +20,8 @@ public class AltQQTest extends ParsingTest {
         List<ActionBlock> allActionBlocks = w3gInfo.getAllActionBlocks();
         Optional<ActionBlock> pauseGame = allActionBlocks.stream().filter(a -> a instanceof PauseGame).findFirst();
         assertTrue(pauseGame.isPresent());
+
+//        assertTrue(Files.equal(new File("altqq.w3g"), new File("backToW3g.w3g")));
     }
 
 

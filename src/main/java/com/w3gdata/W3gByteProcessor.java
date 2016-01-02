@@ -25,7 +25,20 @@ public class W3gByteProcessor {
         ByteUtils.debugToFile(buf, data.replayInformation.header.firstDataBlockOffset,
                 buf.length - data.replayInformation.header.firstDataBlockOffset, "only_data_blocks_compressed.bin");
 
+        ByteUtils.debugToFile(buf, 0, data.replayInformation.header.firstDataBlockOffset, "only_data_headers_compressed.bin");
+
         decompressed = new ByteBuffer(reader.decompress(), PLAYER_RECORD_OFFSET);
+        ByteUtils.debugToFile(decompressed.getBuf(), "decompressed.bin");
+
+        DataBlockWriter writer = new DataBlockWriter(reader.getBlocks());
+        byte[] compressedBack = writer.compress();
+
+        byte[] backToW3g = new byte[compressedBack.length + data.replayInformation.header.firstDataBlockOffset];
+        System.arraycopy(buf, 0, backToW3g, 0, data.replayInformation.header.firstDataBlockOffset);
+        System.arraycopy(compressedBack, 0, backToW3g, data.replayInformation.header.firstDataBlockOffset, compressedBack.length);
+        ByteUtils.debugToFile(backToW3g, "backToW3g.w3g");
+
+
         data.host = readPlayerRecord();
         data.gameName = decompressed.readNullTerminatedString();
         decompressed.increment(1);
@@ -118,6 +131,7 @@ public class W3gByteProcessor {
         data.replayInformation.subHeader.buildNumber = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x0008);
         data.replayInformation.subHeader.flags = ByteUtils.readWord(buf, HEADER_SUBHEADER_OFFSET + 0x000A);
         data.replayInformation.subHeader.timeLength = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x000C);
+        data.replayInformation.subHeader.checksum = ByteUtils.readDWord(buf, HEADER_SUBHEADER_OFFSET + 0x0010);
     }
 
     private void readReplayData() {

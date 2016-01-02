@@ -20,7 +20,6 @@ public class ReplayDataReader {
     public ReplayDataReader(W3gInfo data, ByteBuffer buf) {
         this.data = data;
         this.buf = buf;
-        buf.debugWhatIsLeftToFile();
     }
 
     public void read() {

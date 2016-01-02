@@ -36,6 +36,7 @@ public class ReplayInformation {
         public int buildNumber;
         public int flags;
         public int timeLength;
+        public int checksum;
 
         @Override
         public String toString() {
