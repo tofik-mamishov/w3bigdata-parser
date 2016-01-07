@@ -1,6 +1,6 @@
 package com.w3gdata.parser.actionblock;
 
-import com.w3gdata.parser.util.ByteBuffer;
+import com.w3gdata.util.ByteBuffer;
 
 import java.util.HashMap;
 import java.util.Map;

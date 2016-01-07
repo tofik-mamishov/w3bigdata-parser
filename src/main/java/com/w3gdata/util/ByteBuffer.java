@@ -1,4 +1,4 @@
-package com.w3gdata.parser.util;
+package com.w3gdata.util;
 
 public class ByteBuffer {
 

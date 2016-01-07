@@ -1,7 +1,7 @@
 package com.w3gdata.parser;
 
-import com.w3gdata.parser.util.ByteBuffer;
-import com.w3gdata.parser.util.ByteUtils;
+import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.zip.DataFormatException;
@@ -22,23 +22,7 @@ public class W3gByteProcessor {
     public W3gInfo process(byte[] buf) throws DataFormatException {
         readHeaders(buf);
         DataBlockReader reader = new DataBlockReader(buf, data.replayInformation.header.firstDataBlockOffset);
-        ByteUtils.debugToFile(buf, data.replayInformation.header.firstDataBlockOffset,
-                buf.length - data.replayInformation.header.firstDataBlockOffset, "only_data_blocks_compressed.bin");
-
-        ByteUtils.debugToFile(buf, 0, data.replayInformation.header.firstDataBlockOffset, "only_data_headers_compressed.bin");
-
         decompressed = new ByteBuffer(reader.decompress(), PLAYER_RECORD_OFFSET);
-        ByteUtils.debugToFile(decompressed.getBuf(), "decompressed.bin");
-
-        DataBlockWriter writer = new DataBlockWriter(reader.getBlocks());
-        byte[] compressedBack = writer.compress();
-
-        byte[] backToW3g = new byte[compressedBack.length + data.replayInformation.header.firstDataBlockOffset];
-        System.arraycopy(buf, 0, backToW3g, 0, data.replayInformation.header.firstDataBlockOffset);
-        System.arraycopy(compressedBack, 0, backToW3g, data.replayInformation.header.firstDataBlockOffset, compressedBack.length);
-        ByteUtils.debugToFile(backToW3g, "backToW3g.w3g");
-
-
         data.host = readPlayerRecord();
         data.gameName = decompressed.readNullTerminatedString();
         decompressed.increment(1);

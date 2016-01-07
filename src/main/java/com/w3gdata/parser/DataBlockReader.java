@@ -3,13 +3,15 @@ package com.w3gdata.parser;
 import com.google.common.primitives.Bytes;
 import com.jcraft.jzlib.Inflater;
 import com.jcraft.jzlib.JZlib;
-import com.w3gdata.parser.util.ByteUtils;
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToIntFunction;
 import java.util.zip.DataFormatException;
+
+import static com.w3gdata.parser.DataBlockUtils.checkErrors;
 
 public class DataBlockReader {
 
@@ -21,21 +23,17 @@ public class DataBlockReader {
 
     public DataBlockReader(byte[] buf, int firstBlockOffset) {
         this.buf = buf;
-        logger.debug("Given " + buf.length + " bytes.");
         this.firstBlockOffset = firstBlockOffset;
     }
 
     public byte[] decompress() {
         try {
-            logger.debug("Inflating data blocks...");
             int nextBlockOffset = firstBlockOffset;
             while (nextBlockOffset + firstBlockOffset < buf.length) {
                 DataBlock block = readDataBlock(buf, nextBlockOffset);
                 nextBlockOffset += DataBlock.Header.SIZE + block.header.size;
                 blocks.add(block);
             }
-            logger.debug("Read " + blocks.size() + " blocks.");
-
             return concatenate();
         } catch (DataFormatException e) {
             throw new W3gParserException(e.getMessage(), e);
@@ -50,18 +48,6 @@ public class DataBlockReader {
         block.header.checksum = ByteUtils.readDWord(buf, offset + 0x0004);
         block.decompressed = new byte[block.header.decompressedSize];
         inflate(buf, offset, block);
-        ByteUtils.debugToFile(block.decompressed, "first_block_decompressed.bin");
-        ByteUtils.debugToFile(block.decompressed, 0, 0xe6, "first_block_decompressed_meaning.bin");
-
-        ByteUtils.debugToFile(buf, offset, block.header.size + DataBlock.Header.SIZE, "first_block_compressed_with_headers.bin");
-        byte[] firstBlockFullCompressed = new byte[2 + 2 + 4 + block.header.size];
-        buf[offset + 0x0004] = 0;
-        buf[offset + 0x0004 + 1] = 0;
-        buf[offset + 0x0004 + 2] = 0;
-        buf[offset + 0x0004 + 3] = 0;
-        System.arraycopy(buf, offset, firstBlockFullCompressed, 0, firstBlockFullCompressed.length);
-        ByteUtils.debugToFile(firstBlockFullCompressed, "first_block_compressed_with_header_zeroes_at_crc.bin");
-
         return block;
     }
 
@@ -71,12 +57,12 @@ public class DataBlockReader {
         inflater.setOutput(block.decompressed);
 
         int decompressionError = inflater.init();
-        DataBlockUtils.checkErrors(inflater, decompressionError, "inflateInit");
+        checkErrors(inflater, decompressionError, "inflateInit");
         while (moreToInflate(block, inflater)) {
             inflater.avail_in = inflater.avail_out = 1; /* force small buffers */
             decompressionError = inflater.inflate(JZlib.Z_SYNC_FLUSH);
             if (decompressionError == JZlib.Z_STREAM_END) break;
-            DataBlockUtils.checkErrors(inflater, decompressionError, "inflate");
+            checkErrors(inflater, decompressionError, "inflate");
         }
     }
 
@@ -92,7 +78,6 @@ public class DataBlockReader {
                 return value.decompressed.length;
             }
         }).sum();
-        logger.debug("Total inflated is: " + totalSize);
         byte[][] concatenated = new byte[blocks.size()][];
         for (int i = 0; i < blocks.size(); i++) {
             concatenated[i] = blocks.get(i).decompressed;

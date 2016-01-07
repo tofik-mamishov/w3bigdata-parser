@@ -1,6 +1,6 @@
 package com.w3gdata.parser;
 
-import com.w3gdata.parser.util.ByteUtils;
+import com.w3gdata.util.ByteUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

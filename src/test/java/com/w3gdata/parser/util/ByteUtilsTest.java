@@ -1,5 +1,6 @@
 package com.w3gdata.parser.util;
 
+import com.w3gdata.util.ByteUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

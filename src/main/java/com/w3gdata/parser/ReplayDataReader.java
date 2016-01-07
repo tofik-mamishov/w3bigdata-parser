@@ -4,8 +4,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.w3gdata.parser.actionblock.ActionBlock;
 import com.w3gdata.parser.actionblock.ActionBlockFormat;
-import com.w3gdata.parser.util.ByteBuffer;
-import com.w3gdata.parser.util.ByteUtils;
+import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import static com.w3gdata.parser.ReplayDataFormat.*;

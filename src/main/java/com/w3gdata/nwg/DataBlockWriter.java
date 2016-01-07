@@ -1,8 +1,10 @@
-package com.w3gdata.parser;
+package com.w3gdata.nwg;
 
 import com.jcraft.jzlib.Deflater;
 import com.jcraft.jzlib.JZlib;
-import com.w3gdata.parser.util.ByteUtils;
+import com.w3gdata.parser.DataBlock;
+import com.w3gdata.parser.DataBlockUtils;
+import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.List;
