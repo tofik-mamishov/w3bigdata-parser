@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
-import com.w3gdata.parser.actionblock.ActionBlock;
-import com.w3gdata.parser.actionblock.ActionBlockFormat;
+import com.w3gdata.parser.action.Action;
+import com.w3gdata.parser.action.Actions;
 import org.apache.log4j.Logger;
 
 import java.net.URL;
@@ -22,7 +22,7 @@ public abstract class ParsingTest {
 
     protected W3gInfo w3gInfo;
     protected W3gParser parser;
-    protected ImmutableListMultimap<ActionBlockFormat, ActionBlock> actions;
+    protected ImmutableListMultimap<Actions, Action> actions;
 
     public ParsingTest(String name) {
         URL resourceURL = Resources.getResource(name);
@@ -33,8 +33,8 @@ public abstract class ParsingTest {
             w3gInfo = parser.parse(replaySourceFile);
             logger.info("Parsed in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + " ms.");
 
-            List<ActionBlock> allActionBlocks = w3gInfo.getAllActionBlocks();
-            actions = Multimaps.index(allActionBlocks, actionBlock -> ActionBlockFormat.getById(actionBlock.getId()));
+            List<Action> allActions = w3gInfo.getAllActionBlocks();
+            actions = Multimaps.index(allActions, actionBlock -> Actions.getById(actionBlock.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             fail("Couldn't parse " + name);

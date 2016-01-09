@@ -2,8 +2,8 @@ package com.w3gdata.parser;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.w3gdata.parser.actionblock.ActionBlock;
-import com.w3gdata.parser.actionblock.ActionBlockFormat;
+import com.w3gdata.parser.action.Action;
+import com.w3gdata.parser.action.Actions;
 import com.w3gdata.util.ByteBuffer;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
@@ -95,12 +95,12 @@ public class ReplayDataReader {
         return commandDataBlocks;
     }
 
-    private Multimap<Byte, ActionBlock> readActionBlocks(int limit) {
-        Multimap<Byte, ActionBlock> actionBlocks = ArrayListMultimap.create();
+    private Multimap<Byte, Action> readActionBlocks(int limit) {
+        Multimap<Byte, Action> actionBlocks = ArrayListMultimap.create();
         while (buf.getOffset() < limit) {
             int id = buf.readByte();
-            ActionBlockFormat actionBlockFormat = ActionBlockFormat.getById(id);
-            actionBlocks.put((byte)id, actionBlockFormat.process(buf));
+            Action action = Actions.getById(id).shape.deserialize(buf);
+            actionBlocks.put((byte) action.getId(), action);
         }
         return actionBlocks;
     }

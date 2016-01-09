@@ -1,7 +1,7 @@
 package com.w3gdata.parser;
 
-import com.w3gdata.parser.actionblock.ActionBlock;
-import com.w3gdata.parser.actionblock.PauseGame;
+import com.w3gdata.parser.action.Action;
+import com.w3gdata.parser.action.PauseGame;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public class AltQQTest extends ParsingTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-        List<ActionBlock> allActionBlocks = w3gInfo.getAllActionBlocks();
-        Optional<ActionBlock> pauseGame = allActionBlocks.stream().filter(a -> a instanceof PauseGame).findFirst();
+        List<Action> allActions = w3gInfo.getAllActionBlocks();
+        Optional<Action> pauseGame = allActions.stream().filter(a -> a instanceof PauseGame).findFirst();
         assertTrue(pauseGame.isPresent());
 
 //        assertTrue(Files.equal(new File("altqq.w3g"), new File("backToW3g.w3g")));

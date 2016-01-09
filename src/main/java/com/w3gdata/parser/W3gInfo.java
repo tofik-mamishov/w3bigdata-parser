@@ -1,6 +1,6 @@
 package com.w3gdata.parser;
 
-import com.w3gdata.parser.actionblock.ActionBlock;
+import com.w3gdata.parser.action.Action;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -42,7 +42,7 @@ public class W3gInfo {
         playerChatMessages = new ArrayList<>();
     }
 
-    public List<ActionBlock> getAllActionBlocks() {
+    public List<Action> getAllActionBlocks() {
         return timeSlotBlocks.stream()
                 .flatMap(t -> t.getCommandDataBlocks().values().stream())
                 .flatMap(cd -> cd.getActionBlocks().values().stream())
