@@ -1,6 +1,7 @@
-package com.w3gdata.parser;
+package com.w3gdata.nwg;
 
 import com.google.common.collect.ImmutableList;
+import com.w3gdata.parser.ParsingTest;
 import com.w3gdata.parser.action.Action;
 import com.w3gdata.parser.action.Actions;
 import org.junit.Test;

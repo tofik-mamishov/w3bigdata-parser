@@ -3,14 +3,14 @@ package com.w3gdata.parser;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-public class TimeSlotBlock {
+public class TimeSlot {
     public int n;
 
     public int timeIncrement;
 
-    public Multimap<Byte, CommandData> commandDataBlocks;
+    public Multimap<Byte, Command> commandDataBlocks;
 
-    public TimeSlotBlock() {
+    public TimeSlot() {
         commandDataBlocks = ArrayListMultimap.create();
     }
 
@@ -30,11 +30,11 @@ public class TimeSlotBlock {
         this.timeIncrement = timeIncrement;
     }
 
-    public Multimap<Byte, CommandData> getCommandDataBlocks() {
+    public Multimap<Byte, Command> getCommandDataBlocks() {
         return commandDataBlocks;
     }
 
-    public void setCommandDataBlocks(Multimap<Byte, CommandData> commandDataBlocks) {
+    public void setCommandDataBlocks(Multimap<Byte, Command> commandDataBlocks) {
         this.commandDataBlocks = commandDataBlocks;
     }
 }

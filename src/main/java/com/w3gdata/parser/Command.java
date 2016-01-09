@@ -4,14 +4,14 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.w3gdata.parser.action.Action;
 
-public class CommandData {
+public class Command {
     public byte playerId;
 
     public int actionBlockLength;
 
     public Multimap<Byte, Action> actionBlocks;
 
-    public CommandData() {
+    public Command() {
         actionBlocks = ArrayListMultimap.create();
     }
 

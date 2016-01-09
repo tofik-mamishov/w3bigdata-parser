@@ -1,7 +1,8 @@
-package com.w3gdata.parser;
+package com.w3gdata.parser.util;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import com.w3gdata.parser.EncodedStringDecoder;
 import org.junit.Before;
 import org.junit.Test;
 

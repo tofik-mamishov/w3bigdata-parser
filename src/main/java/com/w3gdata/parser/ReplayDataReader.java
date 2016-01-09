@@ -49,7 +49,7 @@ public class ReplayDataReader {
         } else if (replayDataFormat == FORCED_GAME_END_COUNTDOWN) {
             data.forcedGameEndCountdownRecords.add(readForcedGameEndCountdownRecord());
         } else if (replayDataFormat == TIME_SLOT_BLOCK_NEW) {
-            data.timeSlotBlocks.add(readTimeBlock());
+            data.timeSlots.add(readTimeBlock());
         } else if (replayDataFormat == PLAYER_CHAT_MESSAGE) {
             data.playerChatMessages.add(readPlayerChatMessage());
         }
@@ -71,26 +71,26 @@ public class ReplayDataReader {
         return forcedCountdown;
     }
 
-    private TimeSlotBlock readTimeBlock() {
-        TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
-        timeSlotBlock.n = buf.readWord();
-        timeSlotBlock.timeIncrement = buf.readWord();
-        if (timeSlotBlock.n != 2) {
+    private TimeSlot readTimeBlock() {
+        TimeSlot timeSlot = new TimeSlot();
+        timeSlot.n = buf.readWord();
+        timeSlot.timeIncrement = buf.readWord();
+        if (timeSlot.n != 2) {
             //Please do not approach!
-            timeSlotBlock.commandDataBlocks =
-                    readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 2);
+            timeSlot.commandDataBlocks =
+                    readCommandDataBlocks(buf.getOffset() + timeSlot.n - 2);
         }
-        return timeSlotBlock;
+        return timeSlot;
     }
 
-    private Multimap<Byte, CommandData> readCommandDataBlocks(int limit) {
-        Multimap<Byte, CommandData> commandDataBlocks = ArrayListMultimap.create();
+    private Multimap<Byte, Command> readCommandDataBlocks(int limit) {
+        Multimap<Byte, Command> commandDataBlocks = ArrayListMultimap.create();
         while (buf.getOffset() < limit) {
-            CommandData commandData = new CommandData();
-            commandData.playerId = buf.readByte();
-            commandData.actionBlockLength = buf.readWord();
-            commandData.actionBlocks = readActionBlocks(commandData.actionBlockLength + buf.getOffset());
-            commandDataBlocks.put(commandData.playerId, commandData);
+            Command command = new Command();
+            command.playerId = buf.readByte();
+            command.actionBlockLength = buf.readWord();
+            command.actionBlocks = readActionBlocks(command.actionBlockLength + buf.getOffset());
+            commandDataBlocks.put(command.playerId, command);
         }
         return commandDataBlocks;
     }

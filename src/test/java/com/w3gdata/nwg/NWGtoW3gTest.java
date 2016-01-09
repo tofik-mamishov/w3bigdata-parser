@@ -1,4 +1,4 @@
-package com.w3gdata.parser;
+package com.w3gdata.nwg;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;

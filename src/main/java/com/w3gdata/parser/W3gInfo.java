@@ -18,7 +18,7 @@ public class W3gInfo {
     public GameStartRecord gameStartRecord = new GameStartRecord();
     public List<LeaveGameRecord> leaveGameRecords;
     public List<ForcedGameEndCountdownRecord> forcedGameEndCountdownRecords;
-    public List<TimeSlotBlock> timeSlotBlocks;
+    public List<TimeSlot> timeSlots;
     public List<PlayerChatMessage> playerChatMessages;
 
     private List<PlayerRecord> playerRecords;
@@ -38,12 +38,12 @@ public class W3gInfo {
         leaveGameRecords = new ArrayList<>();
         replayInformation = new ReplayInformation();
         forcedGameEndCountdownRecords = new ArrayList<>();
-        timeSlotBlocks = new ArrayList<>();
+        timeSlots = new ArrayList<>();
         playerChatMessages = new ArrayList<>();
     }
 
     public List<Action> getAllActionBlocks() {
-        return timeSlotBlocks.stream()
+        return timeSlots.stream()
                 .flatMap(t -> t.getCommandDataBlocks().values().stream())
                 .flatMap(cd -> cd.getActionBlocks().values().stream())
                 .collect(Collectors.toList());
