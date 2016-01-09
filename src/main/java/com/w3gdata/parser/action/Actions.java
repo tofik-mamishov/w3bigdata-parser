@@ -18,7 +18,6 @@ public enum Actions {
     CHANGE_SELECTION(new ChangeSelection()) ,
     ASSIGN_GROUP_HOTKEY(new AssignGroupHotkey()),
     SELECT_GROUP_HOTKEY(new SelectGroupHotkey()),
-    SELECT_SUBGROUP(new SelectSubgroup()),
     SELECT_SUBGROUP_1_14b(new SelectSubgroup114b()),
     PRE_SUBSELECTION(new PreSubselection()),
     SELECT_GROUND_ITEM(new SelectGroundItem()),
