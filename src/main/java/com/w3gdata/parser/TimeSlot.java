@@ -2,39 +2,27 @@ package com.w3gdata.parser;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.w3gdata.util.ByteBuffer;
 
 public class TimeSlot {
-    public int n;
+    public final int n;
+    public final int timeIncrement;
+    public final Multimap<Byte, Command> commandDataBlocks;
 
-    public int timeIncrement;
-
-    public Multimap<Byte, Command> commandDataBlocks;
-
-    public TimeSlot() {
+    public TimeSlot(ByteBuffer buf) {
+        n = buf.readWord();
+        timeIncrement = buf.readWord();
         commandDataBlocks = ArrayListMultimap.create();
     }
 
     public int getN() {
         return n;
     }
-
-    public void setN(int n) {
-        this.n = n;
-    }
-
     public int getTimeIncrement() {
         return timeIncrement;
     }
-
-    public void setTimeIncrement(int timeIncrement) {
-        this.timeIncrement = timeIncrement;
-    }
-
     public Multimap<Byte, Command> getCommandDataBlocks() {
         return commandDataBlocks;
     }
 
-    public void setCommandDataBlocks(Multimap<Byte, Command> commandDataBlocks) {
-        this.commandDataBlocks = commandDataBlocks;
-    }
 }

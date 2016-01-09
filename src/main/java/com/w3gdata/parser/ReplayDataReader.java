@@ -72,27 +72,21 @@ public class ReplayDataReader {
     }
 
     private TimeSlot readTimeBlock() {
-        TimeSlot timeSlot = new TimeSlot();
-        timeSlot.n = buf.readWord();
-        timeSlot.timeIncrement = buf.readWord();
+        TimeSlot timeSlot = new TimeSlot(buf);
         if (timeSlot.n != 2) {
-            //Please do not approach!
-            timeSlot.commandDataBlocks =
-                    readCommandDataBlocks(buf.getOffset() + timeSlot.n - 2);
+            timeSlot.commandDataBlocks.putAll(readCommandDataBlocks(buf.getOffset() + timeSlot.n - 2));
         }
         return timeSlot;
     }
 
     private Multimap<Byte, Command> readCommandDataBlocks(int limit) {
-        Multimap<Byte, Command> commandDataBlocks = ArrayListMultimap.create();
+        Multimap<Byte, Command> commands = ArrayListMultimap.create();
         while (buf.getOffset() < limit) {
-            Command command = new Command();
-            command.playerId = buf.readByte();
-            command.actionBlockLength = buf.readWord();
-            command.actionBlocks = readActionBlocks(command.actionBlockLength + buf.getOffset());
-            commandDataBlocks.put(command.playerId, command);
+            Command command = new Command(buf);
+            command.actionBlocks.putAll(readActionBlocks(command.actionBlockLength + buf.getOffset()));
+            commands.put(command.playerId, command);
         }
-        return commandDataBlocks;
+        return commands;
     }
 
     private Multimap<Byte, Action> readActionBlocks(int limit) {

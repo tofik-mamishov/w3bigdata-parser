@@ -1,5 +1,7 @@
 package com.w3gdata.parser.action;
 
+import org.apache.log4j.Logger;
+
 public enum Actions {
     PAUSE_GAME(new PauseGame()),
     RESUME_GAME(new ResumeGame()),
@@ -40,6 +42,8 @@ public enum Actions {
     UNKNOWN_0_X_74(UnknownActionFactory.INSTANCE.get(0x74)),
     UNKNOWN_0_X_75(UnknownActionFactory.INSTANCE.get(0x75));
 
+    private static final Logger logger = Logger.getLogger(Actions.class);
+
     public final int id;
     public final Action shape;
 
@@ -54,6 +58,7 @@ public enum Actions {
                 return action;
             }
         }
+        logger.error("Unknown action id: " + id);
         return null;
     }
 }
