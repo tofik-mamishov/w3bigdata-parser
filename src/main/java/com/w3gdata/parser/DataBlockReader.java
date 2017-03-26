@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
 import static com.w3gdata.parser.DataBlockUtils.checkErrors;
@@ -18,43 +19,37 @@ public class DataBlockReader {
 
     private static final Logger logger = Logger.getLogger(DataBlockReader.class);
 
-    private final byte[] buf;
-    private final int firstBlockOffset;
-    private final List<DataBlock> blocks = new ArrayList<>();
+    private final ByteReader reader;
 
-    public DataBlockReader(byte[] buf, int firstBlockOffset) {
-        this.buf = buf;
-        this.firstBlockOffset = firstBlockOffset;
+    public DataBlockReader(ByteReader reader) {
+        this.reader = reader;
     }
 
-    public byte[] decompress() {
+    public byte[] nextDataBlocks() {
         try {
-            int nextBlockOffset = firstBlockOffset;
-            while (nextBlockOffset + firstBlockOffset < buf.length) {
-                DataBlock block = readDataBlock(buf, nextBlockOffset);
-                nextBlockOffset += DataBlockHeader.SIZE + block.header.size;
+            final List<DataBlock> blocks = new ArrayList<>();
+            while (reader.hasMore()) {
+                DataBlock block = nextDataBlock();
                 blocks.add(block);
             }
-            return concatenate();
+            return concatenate(blocks);
         } catch (DataFormatException e) {
             throw new W3gParserException(e.getMessage(), e);
         }
     }
 
-
-    private DataBlock readDataBlock(byte[] buf, int offset) throws DataFormatException {
-        DataBlockHeader header = new DataBlockHeader(new ByteReader(buf, offset));
+    private DataBlock nextDataBlock() throws DataFormatException {
+        DataBlockHeader header = new DataBlockHeader(reader);
         byte[] decompressed = new byte[header.decompressedSize];
         DataBlock block = new DataBlock(header, decompressed);
-        header.size = ByteUtils.readWord(buf, offset);
-        header.decompressedSize = ByteUtils.readWord(buf, offset + 0x0002);
-        inflate(buf, offset, block);
+        inflate(block);
+        reader.forward(block.header.size);
         return block;
     }
 
-    private void inflate(byte[] buf, int offset, DataBlock block) {
+    private void inflate(DataBlock block) {
         Inflater inflater = new Inflater();
-        inflater.setInput(buf, offset + DataBlockHeader.SIZE, block.header.size, true);
+        inflater.setInput(reader.getBuf(), reader.offset(), block.header.size, true);
         inflater.setOutput(block.decompressed);
 
         int decompressionError = inflater.init();
@@ -72,25 +67,11 @@ public class DataBlockReader {
                 inflater.total_in < block.header.size;
     }
 
-    private byte[] concatenate() {
-        int totalSize = blocks.stream().mapToInt(new ToIntFunction<DataBlock>() {
-            @Override
-            public int applyAsInt(DataBlock value) {
-                return value.decompressed.length;
-            }
-        }).sum();
+    private byte[] concatenate(List<DataBlock> blocks) {
         byte[][] concatenated = new byte[blocks.size()][];
         for (int i = 0; i < blocks.size(); i++) {
             concatenated[i] = blocks.get(i).decompressed;
         }
         return Bytes.concat(concatenated);
-    }
-
-    public int getFirstBlockOffset() {
-        return firstBlockOffset;
-    }
-
-    public List<DataBlock> getBlocks() {
-        return blocks;
     }
 }
