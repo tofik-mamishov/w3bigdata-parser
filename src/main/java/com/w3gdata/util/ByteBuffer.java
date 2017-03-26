@@ -49,7 +49,11 @@ public class ByteBuffer {
     }
 
     public int findNullTermination() {
-        int i = offset;
+        return findNullTermination(0);
+    }
+
+    public int findNullTermination(int additionalOffset) {
+        int i = offset + additionalOffset;
         while (buf[i++] != 0) ;
         return i - 1;
     }
@@ -57,7 +61,7 @@ public class ByteBuffer {
 
     public String readNullTerminatedString() {
         String result = ByteUtils.readNullTerminatedString(buf, offset);
-        offset += result.length() + 1;
+        offset += result.getBytes().length + 1;
         return result;
     }
 
@@ -69,5 +73,11 @@ public class ByteBuffer {
         ByteUtils.debugToFile(getBuf(), getOffset(),
                 getBuf().length - getOffset(),
                 "decompressed.bin");
+    }
+
+    public void swapNextTwo() {
+        byte tmp = buf[offset];
+        buf[offset] = buf[offset + 1];
+        buf[offset + 1] = tmp;
     }
 }
