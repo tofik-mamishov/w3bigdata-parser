@@ -85,7 +85,6 @@ public class W3gByteProcessor {
     private void readGameSettings() {
         int currentOffset = decompressed.offset();
         byte[] decoded = new EncodedStringDecoder().decode(decompressed.getBuf(), currentOffset, decompressed.findNullTermination() - currentOffset);
-        decompressed.forward(decoded.length + 1);
         int pos = 0;
         data.gameSettings.speed = decoded[pos++];
         data.gameSettings.visibilityRules = decoded[pos++];
