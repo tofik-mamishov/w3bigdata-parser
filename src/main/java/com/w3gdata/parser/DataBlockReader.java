@@ -3,6 +3,7 @@ package com.w3gdata.parser;
 import com.google.common.primitives.Bytes;
 import com.jcraft.jzlib.Inflater;
 import com.jcraft.jzlib.JZlib;
+import com.w3gdata.util.ByteReader;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
@@ -31,7 +32,7 @@ public class DataBlockReader {
             int nextBlockOffset = firstBlockOffset;
             while (nextBlockOffset + firstBlockOffset < buf.length) {
                 DataBlock block = readDataBlock(buf, nextBlockOffset);
-                nextBlockOffset += DataBlock.Header.SIZE + block.header.size;
+                nextBlockOffset += DataBlockHeader.SIZE + block.header.size;
                 blocks.add(block);
             }
             return concatenate();
@@ -42,18 +43,18 @@ public class DataBlockReader {
 
 
     private DataBlock readDataBlock(byte[] buf, int offset) throws DataFormatException {
-        DataBlock block = new DataBlock();
-        block.header.size = ByteUtils.readWord(buf, offset);
-        block.header.decompressedSize = ByteUtils.readWord(buf, offset + 0x0002);
-        block.header.checksum = ByteUtils.readDWord(buf, offset + 0x0004);
-        block.decompressed = new byte[block.header.decompressedSize];
+        DataBlockHeader header = new DataBlockHeader(new ByteReader(buf, offset));
+        byte[] decompressed = new byte[header.decompressedSize];
+        DataBlock block = new DataBlock(header, decompressed);
+        header.size = ByteUtils.readWord(buf, offset);
+        header.decompressedSize = ByteUtils.readWord(buf, offset + 0x0002);
         inflate(buf, offset, block);
         return block;
     }
 
     private void inflate(byte[] buf, int offset, DataBlock block) {
         Inflater inflater = new Inflater();
-        inflater.setInput(buf, offset + DataBlock.Header.SIZE, block.header.size, true);
+        inflater.setInput(buf, offset + DataBlockHeader.SIZE, block.header.size, true);
         inflater.setOutput(block.decompressed);
 
         int decompressionError = inflater.init();

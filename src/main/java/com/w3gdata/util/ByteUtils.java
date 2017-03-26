@@ -1,6 +1,6 @@
 package com.w3gdata.util;
 
-import com.w3gdata.Offset;
+import com.w3gdata.parser.Offset;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;

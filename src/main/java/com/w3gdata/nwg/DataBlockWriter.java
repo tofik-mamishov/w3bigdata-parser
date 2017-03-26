@@ -3,6 +3,7 @@ package com.w3gdata.nwg;
 import com.jcraft.jzlib.Deflater;
 import com.jcraft.jzlib.JZlib;
 import com.w3gdata.parser.DataBlock;
+import com.w3gdata.parser.DataBlockHeader;
 import com.w3gdata.parser.DataBlockUtils;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
@@ -29,12 +30,8 @@ public class DataBlockWriter {
     }
 
     public int getTotalSize() {
-        return blocks.stream().map(DataBlock::getHeader).mapToInt(new ToIntFunction<DataBlock.Header>() {
-            @Override
-            public int applyAsInt(DataBlock.Header value) {
-                return value.getSize() + DataBlock.Header.SIZE;
-            }
-        }).sum();
+        return blocks.stream().map(DataBlock::getHeader).mapToInt(
+                value -> value.getSize() + DataBlockHeader.SIZE).sum();
     }
 
     private void changeFirstDataBlock() {
@@ -58,13 +55,13 @@ public class DataBlockWriter {
 
     private byte[] writeDataBlock(DataBlock block) {
         byte[] deflated = deflate(block.decompressed, block);
-        byte[] result = new byte[deflated.length + DataBlock.Header.SIZE];
+        byte[] result = new byte[deflated.length + DataBlockHeader.SIZE];
         ByteUtils.debugToFile(deflated, "decompressed_before_magic.bin");
         ByteUtils.writeWord(result, 0x0000, block.header.size);
         ByteUtils.writeWord(result, 0x0002, block.header.decompressedSize);
         ByteUtils.writeDWord(result, 0x0004, block.header.checksum);
 
-        ByteUtils.writeBytes(result, DataBlock.Header.SIZE, deflated);
+        ByteUtils.writeBytes(result, DataBlockHeader.SIZE, deflated);
 
         ByteUtils.debugToFile(result, "decompressed_before_magic_with_headers.bin");
 

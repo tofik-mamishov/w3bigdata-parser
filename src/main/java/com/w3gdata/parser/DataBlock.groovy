@@ -1,4 +1,4 @@
-package com.w3gdata
+package com.w3gdata.parser
 
 import jdk.nashorn.internal.ir.annotations.Immutable
 
@@ -10,5 +10,9 @@ class DataBlock {
     DataBlock(DataBlockHeader header, byte[] decompressed) {
         this.header = header
         this.decompressed = decompressed
+    }
+
+    DataBlockHeader getHeader() {
+        return header
     }
 }

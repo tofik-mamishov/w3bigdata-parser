@@ -1,6 +1,7 @@
-package com.w3gdata
+package com.w3gdata.parser
 
 import com.w3gdata.util.ByteReader
+import com.w3gdata.util.ByteUtils
 import groovy.transform.Canonical
 
 @Canonical
@@ -9,9 +10,15 @@ class DataBlockHeader {
 
     public int size
     public int decompressedSize
+    public int checksum
 
     DataBlockHeader(ByteReader reader) {
-        this.size = reader.nextWord()
-        this.decompressedSize = reader.nextWord()
+        size = reader.nextWord()
+        decompressedSize = reader.nextWord()
+        checksum = reader.nextDWord()
+    }
+
+    int getSize() {
+        return size
     }
 }
