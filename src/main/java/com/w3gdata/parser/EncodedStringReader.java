@@ -1,12 +1,21 @@
 package com.w3gdata.parser;
 
-public class EncodedStringDecoder {
+import com.w3gdata.util.ByteReader;
 
-    public String decode(String encodedString) {
-        return new String(decode(encodedString.getBytes(), 0, encodedString.length()));
+public class EncodedStringReader {
+
+    private final ByteReader reader;
+
+    public EncodedStringReader(ByteReader reader) {
+        this.reader = reader;
     }
 
-    public byte[] decode(byte[] buf, int offset, int len) {
+    public byte[] decode() {
+        int currentOffset = reader.offset();
+        return decode(reader.getBuf(), currentOffset, reader.findNullTermination() - currentOffset);
+    }
+
+    private byte[] decode(byte[] buf, int offset, int len) {
         byte[] decoded = new byte[len];
         byte mask = 0;
         int j = 0;

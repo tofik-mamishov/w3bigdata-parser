@@ -2,7 +2,8 @@ package com.w3gdata.parser.util;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
-import com.w3gdata.parser.EncodedStringDecoder;
+import com.w3gdata.parser.EncodedStringReader;
+import com.w3gdata.util.ByteReader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 
-public class EncodedStringDecoderTest {
+public class EncodedStringReaderTest {
 
     public static final String ENCODED_STRING_FILE_NAME = "encoded_string.bin";
 
@@ -22,18 +23,18 @@ public class EncodedStringDecoderTest {
 
     private ByteSource encodedByteSource;
 
-    private EncodedStringDecoder encodedStringDecoder;
+    private EncodedStringReader encodedStringReader;
 
     @Before
     public void setUp() throws Exception {
         URL resourceURL = Resources.getResource(ENCODED_STRING_FILE_NAME);
         encodedByteSource = Resources.asByteSource(resourceURL);
-        encodedStringDecoder = new EncodedStringDecoder();
+        encodedStringReader = new EncodedStringReader(new ByteReader(encodedByteSource.read()));
     }
 
     @Test
     public void testDecode() throws Exception {
-        String decodedString = encodedStringDecoder.decode(new String(encodedByteSource.read()));
+        String decodedString = new String(encodedStringReader.decode());
         assertEquals(EXPECTED_ENCODED_STRING, decodedString.substring(DECODED_MAP_FROM, DECODED_MAP_TO));
     }
 }

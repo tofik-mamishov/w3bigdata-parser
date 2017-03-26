@@ -17,11 +17,13 @@ public class W3gByteProcessor {
         ByteReader headerReader = new ByteReader(buf, 0);
         data.replayInformation = readHeaders(headerReader);
         DataBlockReader dataBlockReader = new DataBlockReader(headerReader);
+
         dataReader = new ByteReader(dataBlockReader.nextDataBlocks());
         data.host = new PlayerRecord(dataReader);
-        data.gameName = dataReader.nextNullTerminatedString();
-        dataReader.forward(1);
-        readGameSettings();
+
+        data.gameName = dataReader.nextNullTerminatedStringAndForward();
+        data.gameSettings = new GameSettings(dataReader);
+
         data.playerCount = dataReader.nextDWord();
         data.gameType = dataReader.nextDWord();
         data.languageId = dataReader.nextDWord();
@@ -71,18 +73,7 @@ public class W3gByteProcessor {
     }
 
     private void readGameSettings() {
-        int currentOffset = dataReader.offset();
-        byte[] decoded = new EncodedStringDecoder().decode(dataReader.getBuf(), currentOffset, dataReader.findNullTermination() - currentOffset);
-        int pos = 0;
-        data.gameSettings.speed = decoded[pos++];
-        data.gameSettings.visibilityRules = decoded[pos++];
-        data.gameSettings.teamRules = decoded[pos++];
-        data.gameSettings.gameRules = decoded[pos++];
-        pos += 9;
-        data.gameSettings.mapName = ByteUtils.readNullTerminatedString(decoded, pos);
-        pos += data.gameSettings.mapName.length() + 1;
-        data.gameSettings.creatorName = ByteUtils.readNullTerminatedString(decoded, pos);
-        dataReader.forward(decoded.length + 1);
+        data.gameSettings = new GameSettings(dataReader);
     }
 
 

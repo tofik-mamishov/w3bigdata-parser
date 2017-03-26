@@ -82,10 +82,15 @@ public class ByteReader {
         return i - 1;
     }
 
-
     public String nextNullTerminatedString() {
         String result = ByteUtils.readNullTerminatedString(buf, offset);
         offset += result.getBytes().length + 1;
+        return result;
+    }
+
+    public String nextNullTerminatedStringAndForward() {
+        String result = nextNullTerminatedString();
+        forward(1);
         return result;
     }
 

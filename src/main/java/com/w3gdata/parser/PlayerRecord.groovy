@@ -9,14 +9,14 @@ import groovy.transform.TupleConstructor
 @Canonical
 class PlayerRecord {
     public static final int POSSIBLE_RECORD_ID = 0x00000110
-    public Types type
+    public PlayerType type
     public byte playerId
     public String name
-    public GameTypes gameType
-    public Races race
+    public GameType gameType
+    public Race race
 
     @TupleConstructor
-    static enum Races implements Valued {
+    static enum Race implements Valued {
         Human(0x01),
         Orc(0x02),
         NightElf(0x04),
@@ -27,33 +27,33 @@ class PlayerRecord {
 
         int value
 
-        static Races of(int value) {
-            EnumUtils.of(Races.class, value)
+        static Race of(int value) {
+            EnumUtils.of(Race.class, value)
         }
     }
 
     @TupleConstructor
-    static enum Types implements Valued {
+    static enum PlayerType implements Valued {
         GameHost(0x00),
         AdditionalPlayer(0x16)
 
         int value
 
-        static Types of(int value) {
-            EnumUtils.of(Types.class, value)
+        static PlayerType of(int value) {
+            EnumUtils.of(PlayerType.class, value)
         }
     }
 
     @TupleConstructor
-    static enum GameTypes implements Valued {
+    static enum GameType implements Valued {
         Custom(0x01, 1),
         Ladder(0x16, 4)
 
         int value
         int size
 
-        static GameTypes of(int value) {
-            EnumUtils.of(GameTypes.class, value)
+        static GameType of(int value) {
+            EnumUtils.of(GameType.class, value)
         }
     }
 
@@ -62,13 +62,13 @@ class PlayerRecord {
         if (possiblyRecordId != POSSIBLE_RECORD_ID) {
             throw new W3gParserException("Unknown player record first 4 bytes, expected $POSSIBLE_RECORD_ID but was $possiblyRecordId")
         }
-        type = Types.of(reader.nextByte())
+        type = PlayerType.of(reader.nextByte())
         playerId = reader.nextByte()
         name = reader.nextNullTerminatedString()
-        gameType = GameTypes.of(reader.nextByteAsInt())
+        gameType = GameType.of(reader.nextByteAsInt())
         reader.forward(gameType.size)
-        if (gameType == GameTypes.Ladder) {
-            race = Races.of(reader.nextDWord())
+        if (gameType == GameType.Ladder) {
+            race = Race.of(reader.nextDWord())
         }
     }
 }

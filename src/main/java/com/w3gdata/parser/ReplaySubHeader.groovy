@@ -30,33 +30,33 @@ offset | size/type | Description
 @ToString(includePackage = false)
 class ReplaySubHeader {
     public Version version
-    public GameType gameType
+    public ReplayType gameType
     public Duration timeLength
     public int crc
 
-    enum GameType implements Valued {
+    enum ReplayType implements Valued {
         SinglePlayer(0x0000),
         MultiPlayer(0x8000)
 
         final int value
 
-        GameType(int value) {
+        ReplayType(int value) {
             this.value = value
         }
 
-        static GameType of(int value) {
-            EnumUtils.of(GameType.class, value)
+        static ReplayType of(int value) {
+            EnumUtils.of(ReplayType.class, value)
         }
     }
 
     ReplaySubHeader(ByteReader reader) {
         version = new Version(reader)
-        gameType = GameType.of(reader.nextWord())
+        gameType = ReplayType.of(reader.nextWord())
         timeLength = Duration.ofMillis(reader.nextDWord())
         crc = reader.nextDWord()
     }
 
-    ReplaySubHeader(Version version, GameType gameType, Duration timeLength, int crc) {
+    ReplaySubHeader(Version version, ReplayType gameType, Duration timeLength, int crc) {
         this.version = version
         this.gameType = gameType
         this.timeLength = timeLength

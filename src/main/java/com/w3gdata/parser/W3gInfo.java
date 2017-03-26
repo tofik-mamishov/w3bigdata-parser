@@ -14,7 +14,7 @@ public class W3gInfo {
 
     public ReplayInformation replayInformation;
     public PlayerRecord host;
-    public GameSettings gameSettings = new GameSettings();
+    public GameSettings gameSettings;
     public GameStartRecord gameStartRecord = new GameStartRecord();
     public List<LeaveGameRecord> leaveGameRecords;
     public List<ForcedGameEndCountdownRecord> forcedGameEndCountdownRecords;
