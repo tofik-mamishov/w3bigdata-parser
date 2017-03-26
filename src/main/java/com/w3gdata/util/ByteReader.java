@@ -10,6 +10,10 @@ public class ByteReader {
         this.offset = offset;
     }
 
+    public ByteReader(byte[] buf) {
+        this(buf, 0);
+    }
+
     public void forward(int i) {
         offset += i;
     }
@@ -20,6 +24,10 @@ public class ByteReader {
 
     public byte nextByte() {
         return buf[offset++];
+    }
+
+    public int nextByteAsInt() {
+        return (int)buf[offset++];
     }
 
     public byte[] nextBytes(int n) {

@@ -35,8 +35,8 @@ class ReplaySubHeader {
     public int crc
 
     enum GameType implements Valued {
-        SINGLE_PLAYER(0x0000),
-        MULTI_PLAYER(0x8000)
+        SinglePlayer(0x0000),
+        MultiPlayer(0x8000)
 
         final int value
 

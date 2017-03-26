@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class W3gInfo {
 
     public ReplayInformation replayInformation;
-    public PlayerRecord host = new PlayerRecord();
+    public PlayerRecord host;
     public GameSettings gameSettings = new GameSettings();
     public GameStartRecord gameStartRecord = new GameStartRecord();
     public List<LeaveGameRecord> leaveGameRecords;

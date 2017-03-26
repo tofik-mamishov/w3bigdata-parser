@@ -15,7 +15,7 @@ import groovy.transform.ToString
     0x0024 |  1 dword  | replay header version:
            |           |  0x00 for WarCraft III with patch <= 1.06
            |           |  0x01 for WarCraft III patch >= 1.07 and TFT replays
-    0x0028 |  1 dword  | overall size of decompressed data (excluding header)
+    0x0028 |  1 dword  | overall size of dataReader data (excluding header)
     0x002c |  1 dword  | number of compressed data blocks in file
     0x0030 |  n bytes  | SubHeader (see section 2.1 and 2.2)
      */
