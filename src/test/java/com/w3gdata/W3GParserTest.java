@@ -2,6 +2,9 @@ package com.w3gdata;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import com.w3gdata.ReplaySubHeader.GameType;
+import com.w3gdata.Version.VersionIdentifiers;
+import java.time.Duration;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +12,7 @@ import org.junit.Test;
 import java.net.URL;
 import java.text.ParseException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 public class W3gParserTest {
@@ -27,7 +31,7 @@ public class W3gParserTest {
 
     private static final String EXPECTED_MAP = "w3arena__turtlerock__v3";
 
-    private static int EXPECTED_MATCH_LENGTH_MS = (45*60 + 24) * 1000 + 150;
+    private static Duration EXPECTED_MATCH_LENGTH = Duration.ofMillis((45*60 + 24) * 1000 + 150);
 
     private W3gInfo w3gInfo;
     private ByteSource replaySourceFile;
@@ -40,24 +44,16 @@ public class W3gParserTest {
         parser = new W3gParser();
     }
 
-
     @Test
     public void testParseHeader() throws Exception {
         try {
             w3gInfo = parser.parse(replaySourceFile);
-            ReplayInformation.Header expectedHeader = new ReplayInformation.Header();
-            expectedHeader.headerVersion = 1;
-            expectedHeader.size = (int) replaySourceFile.size();
-            expectedHeader.firstDataBlockOffset = 68;
-
-            ReplayInformation.SubHeader expectedSubHeader = new ReplayInformation.SubHeader();
-            expectedSubHeader.versionNumber = 26;
-            expectedSubHeader.buildNumber = 6059;
-            expectedSubHeader.flags = 0x8000;
-            expectedSubHeader.timeLength = EXPECTED_MATCH_LENGTH_MS;
-            ReplayInformation expectedReplayInformation = new ReplayInformation();
-            expectedReplayInformation.header = expectedHeader;
-            expectedReplayInformation.subHeader = expectedSubHeader;
+            ReplayHeader expectedReplayHeader = new ReplayHeader(1, (int)replaySourceFile.size(), 68, 1, 1);
+            ReplaySubHeader expectedReplaySubHeader = new ReplaySubHeader(new Version(VersionIdentifiers.W3XP, 26, 6059),
+                    GameType.MULTI_PLAYER,
+                    EXPECTED_MATCH_LENGTH, 32);
+            ReplayInformation expectedReplayInformation = new ReplayInformation(expectedReplayHeader,
+                    expectedReplaySubHeader);
 
             PlayerRecord host = new PlayerRecord();
             host.playerId = 2;
@@ -66,7 +62,7 @@ public class W3gParserTest {
             W3gInfo expectedData = new W3gInfo();
             expectedData.replayInformation = expectedReplayInformation;
             expectedData.host = host;
-            assertEquals(expectedData, w3gInfo);
+            assertThat(w3gInfo).isEqualTo(expectedData);
         } catch (ParseException e) {
             fail("Should never happen!");
         }
@@ -75,17 +71,17 @@ public class W3gParserTest {
 
     @Test
     public void testReadPlayersNumber() throws Exception {
-        assertEquals(EXPECTED_PLAYERS_NUMBER, w3gInfo.getPlayerRecords().size());
+        assertThat(w3gInfo.getPlayerRecords()).hasSize(EXPECTED_PLAYERS_NUMBER);
     }
 
     @Test
     public void testReadGameMode() throws Exception {
-        assertEquals(EXPECTED_GAME_MODE, w3gInfo.getGameMode());
+        assertThat(w3gInfo.getGameMode()).isEqualTo(EXPECTED_GAME_MODE);
     }
 
     @Test
     public void testReadMap() throws Exception {
-        assertEquals(EXPECTED_MAP, w3gInfo.getMap());
+        assertThat(w3gInfo.getMap()).isEqualTo(EXPECTED_MAP);
     }
 }
 

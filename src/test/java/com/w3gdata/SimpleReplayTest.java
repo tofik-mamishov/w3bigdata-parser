@@ -2,16 +2,12 @@ package com.w3gdata;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.URL;
-import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleReplayTest {
 
@@ -27,16 +23,11 @@ public class SimpleReplayTest {
         replaySourceFile = Resources.asByteSource(resourceURL);
         parser = new W3gParser();
         w3gInfo = parser.parse(replaySourceFile);
-        assertNotNull(w3gInfo);
+
+        assertThat(w3gInfo).isNotNull();
     }
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-
-
-
     }
-
-
-
 }

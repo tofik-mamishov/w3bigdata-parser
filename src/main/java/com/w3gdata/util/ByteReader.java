@@ -1,16 +1,16 @@
 package com.w3gdata.util;
 
-public class ByteBuffer {
+public class ByteReader {
 
     private final byte[] buf;
     private int offset;
 
-    public ByteBuffer(byte[] buf, int offset) {
+    public ByteReader(byte[] buf, int offset) {
         this.buf = buf;
         this.offset = offset;
     }
 
-    public void increment(int i) {
+    public void forward(int i) {
         offset += i;
     }
 
@@ -18,11 +18,11 @@ public class ByteBuffer {
         return buf[offset];
     }
 
-    public byte readByte() {
+    public byte nextByte() {
         return buf[offset++];
     }
 
-    public byte[] readBytes(int n) {
+    public byte[] nextBytes(int n) {
         byte[] result = new byte[n];
         for (int i = 0; i < n; i++) {
             result[i] = buf[offset++];
@@ -30,20 +30,36 @@ public class ByteBuffer {
         return result;
     }
 
+    public String nextBytesAsString(int n) {
+        byte[] result = new byte[n];
+        for (int i = n - 1; i >= 0; i--) {
+            result[i] = buf[offset++];
+        }
+        return new String(result);
+    }
+
     public byte[] getBuf() {
         return buf;
     }
 
-    public int getOffset() {
+    public int total() {
+        return buf.length;
+    }
+
+    public int left() {
+        return total() - offset();
+    }
+
+    public int offset() {
         return offset;
     }
 
-    public int readDWord() {
+    public int nextDWord() {
         offset += 4;
         return ByteUtils.readDWord(buf, offset - 4);
     }
 
-    public int readWord() {
+    public int nextWord() {
         offset += 2;
         return ByteUtils.readWord(buf, offset - 2);
     }
@@ -55,19 +71,19 @@ public class ByteBuffer {
     }
 
 
-    public String readNullTerminatedString() {
+    public String nextNullTerminatedString() {
         String result = ByteUtils.readNullTerminatedString(buf, offset);
         offset += result.length() + 1;
         return result;
     }
 
-    public boolean hasNext() {
+    public boolean hasMore() {
         return offset < buf.length;
     }
 
     public void debugWhatIsLeftToFile() {
-        ByteUtils.debugToFile(getBuf(), getOffset(),
-                getBuf().length - getOffset(),
+        ByteUtils.debugToFile(getBuf(), offset(),
+                getBuf().length - offset(),
                 "decompressed.bin");
     }
 }

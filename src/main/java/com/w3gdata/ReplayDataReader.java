@@ -6,7 +6,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.w3gdata.actionblock.ActionBlock;
 import com.w3gdata.actionblock.ActionBlockFormat;
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 import org.apache.log4j.Logger;
 
 public class ReplayDataReader {
@@ -14,9 +14,9 @@ public class ReplayDataReader {
     private static final Logger logger = Logger.getLogger(ReplayDataReader.class);
 
     private final W3gInfo data;
-    private final ByteBuffer buf;
+    private final ByteReader buf;
 
-    public ReplayDataReader(W3gInfo data, ByteBuffer buf) {
+    public ReplayDataReader(W3gInfo data, ByteReader buf) {
         this.data = data;
         this.buf = buf;
         buf.debugWhatIsLeftToFile();
@@ -24,14 +24,14 @@ public class ReplayDataReader {
 
     public void read() {
         try {
-            while(buf.hasNext()) {
-                int replayDataId = buf.readByte();
+            while(buf.hasMore()) {
+                int replayDataId = buf.nextByte();
                 ReplayDataFormat replayDataFormat = getById(replayDataId);
                 if (replayDataFormat != null) {
                     if (replayDataFormat.isKnown) {
                         processBlockByFormat(replayDataFormat);
                     } else {
-                        buf.increment(replayDataFormat.fixedSize - 1);
+                        buf.forward(replayDataFormat.fixedSize - 1);
                     }
                 }
             }
@@ -56,47 +56,47 @@ public class ReplayDataReader {
 
     private LeaveGameRecord readLeaveGameRecord() {
         LeaveGameRecord leaveGameRecord = new LeaveGameRecord();
-        leaveGameRecord.reason = buf.readDWord();
-        leaveGameRecord.playerId = buf.readByte();
-        leaveGameRecord.result = buf.readDWord();
-        buf.increment(4);
+        leaveGameRecord.reason = buf.nextDWord();
+        leaveGameRecord.playerId = buf.nextByte();
+        leaveGameRecord.result = buf.nextDWord();
+        buf.forward(4);
         return leaveGameRecord;
     }
 
     private ForcedGameEndCountdownRecord readForcedGameEndCountdownRecord() {
         ForcedGameEndCountdownRecord forcedCountdown = new ForcedGameEndCountdownRecord();
-        forcedCountdown.mode = buf.readDWord();
-        forcedCountdown.countdown = buf.readDWord();
+        forcedCountdown.mode = buf.nextDWord();
+        forcedCountdown.countdown = buf.nextDWord();
         return forcedCountdown;
     }
 
     private TimeSlotBlock readTimeBlock() {
         TimeSlotBlock timeSlotBlock = new TimeSlotBlock();
-        timeSlotBlock.n = buf.readWord();
-        timeSlotBlock.timeIncrement = buf.readWord();
+        timeSlotBlock.n = buf.nextWord();
+        timeSlotBlock.timeIncrement = buf.nextWord();
         if (timeSlotBlock.n != 2) {
             //Please do not approach!
             timeSlotBlock.commandDataBlocks =
-                    readCommandDataBlocks(buf.getOffset() + timeSlotBlock.n - 2);
+                    readCommandDataBlocks(buf.offset() + timeSlotBlock.n - 2);
         }
         return timeSlotBlock;
     }
 
     private Multimap<Byte, CommandData> readCommandDataBlocks(int limit) {
         Multimap<Byte, CommandData> commandDataBlocks = ArrayListMultimap.create();
-        while (buf.getOffset() < limit) {
+        while (buf.offset() < limit) {
             CommandData commandData = new CommandData();
-            commandData.playerId = buf.readByte();
-            commandData.actionBlockLength = buf.readWord();
-            commandData.actionBlocks = readActionBlocks(commandData.actionBlockLength + buf.getOffset());
+            commandData.playerId = buf.nextByte();
+            commandData.actionBlockLength = buf.nextWord();
+            commandData.actionBlocks = readActionBlocks(commandData.actionBlockLength + buf.offset());
         }
         return commandDataBlocks;
     }
 
     private Multimap<Byte, ActionBlock> readActionBlocks(int limit) {
         Multimap<Byte, ActionBlock> actionBlocks = ArrayListMultimap.create();
-        while (buf.getOffset() < limit) {
-            byte id = buf.readByte();
+        while (buf.offset() < limit) {
+            byte id = buf.nextByte();
             actionBlocks.put(id, ActionBlockFormat.getById(id).process(buf));
         }
         return actionBlocks;
@@ -104,11 +104,11 @@ public class ReplayDataReader {
 
     private PlayerChatMessage readPlayerChatMessage() {
         PlayerChatMessage result = new PlayerChatMessage();
-        result.playerId = buf.readByte();
-        result.n = buf.readWord();
-        result.flag = buf.readByte();
-        result.chatMode = buf.readDWord();
-        result.message = buf.readNullTerminatedString();
+        result.playerId = buf.nextByte();
+        result.n = buf.nextWord();
+        result.flag = buf.nextByte();
+        result.chatMode = buf.nextDWord();
+        result.message = buf.nextNullTerminatedString();
         return result;
     }
 }
