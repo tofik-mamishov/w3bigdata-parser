@@ -1,4 +1,4 @@
-package com.w3gdata
+package com.w3gdata.parser
 
 import com.w3gdata.util.ByteReader
 import com.w3gdata.util.EnumUtils

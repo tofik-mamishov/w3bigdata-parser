@@ -1,17 +1,18 @@
 package com.w3gdata.parser;
 
+import static com.w3gdata.parser.ReplayDataFormat.FORCED_GAME_END_COUNTDOWN;
+import static com.w3gdata.parser.ReplayDataFormat.LEAVE_GAME;
+import static com.w3gdata.parser.ReplayDataFormat.PLAYER_CHAT_MESSAGE;
+import static com.w3gdata.parser.ReplayDataFormat.TIME_SLOT_BLOCK_NEW;
+import static com.w3gdata.parser.ReplayDataFormat.getById;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.w3gdata.actionblock.ActionBlock;
-import com.w3gdata.actionblock.ActionBlockFormat;
-import com.w3gdata.util.ByteReader;
 import com.w3gdata.parser.action.Action;
 import com.w3gdata.parser.action.Actions;
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
-
-import static com.w3gdata.parser.ReplayDataFormat.*;
 
 public class ReplayDataReader {
 
@@ -27,7 +28,7 @@ public class ReplayDataReader {
 
     public void read() {
         try {
-            while(buf.hasMore()) {
+            while (buf.hasMore()) {
                 int replayDataId = buf.nextByte();
                 ReplayDataFormat replayDataFormat = getById(replayDataId);
                 if (replayDataFormat != null) {
@@ -39,7 +40,7 @@ public class ReplayDataReader {
                 }
             }
         } catch (Exception e) {
-            logger.error("Failed on offset: " + buf.getOffset());
+            logger.error("Failed on offset: " + buf.offset());
             logger.error(e.getMessage(), e);
             ByteUtils.debugToFile(buf.getBuf(), "full.bin");
             throw new W3gParserException(e);
@@ -77,24 +78,25 @@ public class ReplayDataReader {
     private TimeSlot readTimeBlock() {
         TimeSlot timeSlot = new TimeSlot(buf);
         if (timeSlot.n != 2) {
-            timeSlot.commandDataBlocks.putAll(readCommandDataBlocks(buf.getOffset() + timeSlot.n - 2));
+            timeSlot.commandDataBlocks.putAll(readCommandDataBlocks(buf.offset() + timeSlot.n - 2));
         }
         return timeSlot;
     }
 
     private Multimap<Byte, Command> readCommandDataBlocks(int limit) {
         Multimap<Byte, Command> commands = ArrayListMultimap.create();
-        while (buf.getOffset() < limit) {
+        while (buf.offset() < limit) {
             Command command = new Command(buf);
-            command.actionBlocks.putAll(readActionBlocks(command.actionBlockLength + buf.getOffset()));
+            command.actionBlocks.putAll(readActionBlocks(command.actionBlockLength + buf.offset()));
             commands.put(command.playerId, command);
+        }
         return commands;
     }
 
     private Multimap<Byte, Action> readActionBlocks(int limit) {
         Multimap<Byte, Action> actionBlocks = ArrayListMultimap.create();
-        while (buf.getOffset() < limit) {
-            int id = buf.readByte();
+        while (buf.offset() < limit) {
+            int id = buf.nextByte();
             Action action = Actions.getById(id).shape.deserialize(buf);
             actionBlocks.put((byte) action.getId(), action);
         }

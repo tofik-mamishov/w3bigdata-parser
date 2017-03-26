@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +28,15 @@ public class ChangeSelection implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         ChangeSelection changeSelection = new ChangeSelection();
-        changeSelection.selectMode = buf.readByte();
-        changeSelection.unitsBuildingsNumber = buf.readWord();
-        int limit = buf.getOffset() + changeSelection.unitsBuildingsNumber * 4 * 2;
-        while (buf.getOffset() < limit) {
+        changeSelection.selectMode = buf.nextByte();
+        changeSelection.unitsBuildingsNumber = buf.nextWord();
+        int limit = buf.offset() + changeSelection.unitsBuildingsNumber * 4 * 2;
+        while (buf.offset() < limit) {
             ObjPair pair = new ObjPair();
-            pair.objectId1 = buf.readDWord();
-            pair.objectId2 = buf.readDWord();
+            pair.objectId1 = buf.nextDWord();
+            pair.objectId2 = buf.nextDWord();
             changeSelection.selectedObjs.add(pair);
         }
         return changeSelection;

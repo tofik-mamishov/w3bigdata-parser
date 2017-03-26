@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 //TODO:
 public class SinglePlayerCheats implements Action {
@@ -12,7 +12,7 @@ public class SinglePlayerCheats implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         return this;
     }
 }

@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +24,15 @@ public class AssignGroupHotkey implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         AssignGroupHotkey assignGroupHotkey = new AssignGroupHotkey();
-        assignGroupHotkey.groupNumber = buf.readByte();
-        assignGroupHotkey.selectedObjNumber = buf.readWord();
-        int limit = buf.getOffset() + assignGroupHotkey.selectedObjNumber * 4 * 2;
-        while (buf.getOffset() < limit) {
+        assignGroupHotkey.groupNumber = buf.nextByte();
+        assignGroupHotkey.selectedObjNumber = buf.nextWord();
+        int limit = buf.offset() + assignGroupHotkey.selectedObjNumber * 4 * 2;
+        while (buf.offset() < limit) {
             ObjPair pair = new ObjPair();
-            pair.objectId1 = buf.readDWord();
-            pair.objectId2 = buf.readDWord();
+            pair.objectId1 = buf.nextDWord();
+            pair.objectId2 = buf.nextDWord();
             assignGroupHotkey.selectedObjs.add(pair);
         }
         return assignGroupHotkey;

@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class MapTriggerChatCommand implements Action {
     public static final int ID = 0x60;
@@ -17,11 +17,11 @@ public class MapTriggerChatCommand implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         MapTriggerChatCommand mapTriggerChatCommand = new MapTriggerChatCommand();
-        mapTriggerChatCommand.unknownA = buf.readDWord();
-        mapTriggerChatCommand.unknownB = buf.readDWord();
-        mapTriggerChatCommand.chatCommand = buf.readNullTerminatedString();
+        mapTriggerChatCommand.unknownA = buf.nextDWord();
+        mapTriggerChatCommand.unknownB = buf.nextDWord();
+        mapTriggerChatCommand.chatCommand = buf.nextNullTerminatedString();
         return mapTriggerChatCommand;
     }
 }

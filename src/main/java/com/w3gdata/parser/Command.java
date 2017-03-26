@@ -3,7 +3,7 @@ package com.w3gdata.parser;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.w3gdata.parser.action.Action;
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class Command {
     public final byte playerId;
@@ -12,9 +12,9 @@ public class Command {
 
     public final Multimap<Byte, Action> actionBlocks;
 
-    public Command(ByteBuffer buf) {
-        playerId = buf.readByte();
-        actionBlockLength = buf.readWord();
+    public Command(ByteReader buf) {
+        playerId = buf.nextByte();
+        actionBlockLength = buf.nextWord();
         actionBlocks = ArrayListMultimap.create();
     }
 

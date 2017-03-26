@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class ChangeAllyOptions implements Action {
     public static final int ID = 0x50;
@@ -15,10 +15,10 @@ public class ChangeAllyOptions implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         ChangeAllyOptions changeAllyOptions = new ChangeAllyOptions();
-        changeAllyOptions.playerSlotNumber = buf.readByte();
-        changeAllyOptions.flags = buf.readDWord();
+        changeAllyOptions.playerSlotNumber = buf.nextByte();
+        changeAllyOptions.flags = buf.nextDWord();
         return changeAllyOptions;
     }
 }

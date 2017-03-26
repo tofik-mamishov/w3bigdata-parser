@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class ScenarioTrigger implements Action {
     public static final int ID = 0x62;
@@ -17,11 +17,11 @@ public class ScenarioTrigger implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         ScenarioTrigger scenarioTrigger = new ScenarioTrigger();
-        scenarioTrigger.unknownA = buf.readDWord();
-        scenarioTrigger.unknownB = buf.readDWord();
-        scenarioTrigger.unknownCounter = buf.readDWord();
+        scenarioTrigger.unknownA = buf.nextDWord();
+        scenarioTrigger.unknownB = buf.nextDWord();
+        scenarioTrigger.unknownCounter = buf.nextDWord();
         return scenarioTrigger;
     }
 }

@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class SelectGroundItem implements Action {
     public static final int ID = 0x1C;
@@ -17,10 +17,10 @@ public class SelectGroundItem implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         SelectGroundItem selectGroundItem = new SelectGroundItem();
-        selectGroundItem.unknown = buf.readByte();
-        selectGroundItem.objPair = new ObjPair(buf.readDWord(), buf.readDWord());
+        selectGroundItem.unknown = buf.nextByte();
+        selectGroundItem.objPair = new ObjPair(buf.nextDWord(), buf.nextDWord());
         return selectGroundItem;
     }
 }

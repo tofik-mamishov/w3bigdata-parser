@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class RemoveUnitFromBuildingQueue implements Action {
     public static final int ID = 0x1E;
@@ -17,10 +17,10 @@ public class RemoveUnitFromBuildingQueue implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         RemoveUnitFromBuildingQueue removeUnitFromBuildingQueue = new RemoveUnitFromBuildingQueue();
-        removeUnitFromBuildingQueue.slotNumber = buf.readByte();
-        removeUnitFromBuildingQueue.itemId = buf.readDWord();
+        removeUnitFromBuildingQueue.slotNumber = buf.nextByte();
+        removeUnitFromBuildingQueue.itemId = buf.nextDWord();
         return removeUnitFromBuildingQueue;
     }
 }

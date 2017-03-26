@@ -1,10 +1,10 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public interface Action {
 
     int getId();
 
-    Action deserialize(ByteBuffer buf);
+    Action deserialize(ByteReader buf);
 }

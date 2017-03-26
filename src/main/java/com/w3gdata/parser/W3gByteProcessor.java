@@ -10,7 +10,6 @@ public class W3gByteProcessor {
 
     private static final Logger logger = Logger.getLogger(W3gByteProcessor.class);
 
-    private static final int HEADER_SUBHEADER_OFFSET = 0x0030;
     public static final int PLAYER_RECORD_OFFSET = 0x0004;
 
     private W3gInfo data = new W3gInfo();
@@ -19,7 +18,7 @@ public class W3gByteProcessor {
     public W3gInfo process(byte[] buf) throws DataFormatException {
         ByteReader reader = new ByteReader(buf, 0);
         readHeaders(reader);
-        DataBlockReader dataBlockReader = new DataBlockReader(reader);
+        DataBlockReader dataBlockReader = new DataBlockReader(reader.getBuf(), reader.offset());
         decompressed = new ByteReader(dataBlockReader.decompress(), PLAYER_RECORD_OFFSET);
         data.host = readPlayerRecord();
         data.gameName = decompressed.nextNullTerminatedString();

@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class SaveGame implements Action {
     public static final int ID = 0x06;
@@ -21,7 +21,7 @@ public class SaveGame implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
-        return new SaveGame(buf.readNullTerminatedString());
+    public Action deserialize(ByteReader buf) {
+        return new SaveGame(buf.nextNullTerminatedString());
     }
 }

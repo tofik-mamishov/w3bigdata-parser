@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class UnitBuildingAbilityTargeted extends UnitBuildingAbility {
     public static final int ID = 0x11;
@@ -15,14 +15,14 @@ public class UnitBuildingAbilityTargeted extends UnitBuildingAbility {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         UnitBuildingAbilityTargeted ability = new UnitBuildingAbilityTargeted();
-        ability.abilityFlag = buf.readWord();
-        ability.itemId = buf.readDWord();
-        ability.unknownA = buf.readDWord();
-        ability.unknownB = buf.readDWord();
-        ability.targetX = buf.readDWord();
-        ability.targetY = buf.readDWord();
+        ability.abilityFlag = buf.nextWord();
+        ability.itemId = buf.nextDWord();
+        ability.unknownA = buf.nextDWord();
+        ability.unknownB = buf.nextDWord();
+        ability.targetX = buf.nextDWord();
+        ability.targetY = buf.nextDWord();
         return ability;
     }
 }

@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class MinimapSignal implements Action {
     public static final int ID = 0x68;
@@ -19,11 +19,11 @@ public class MinimapSignal implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         MinimapSignal minimapSignal = new MinimapSignal();
-        minimapSignal.locationX = buf.readDWord();
-        minimapSignal.locationY = buf.readDWord();
-        minimapSignal.unknown = buf.readDWord();
+        minimapSignal.locationX = buf.nextDWord();
+        minimapSignal.locationY = buf.nextDWord();
+        minimapSignal.unknown = buf.nextDWord();
         return minimapSignal;
     }
 }

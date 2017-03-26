@@ -1,4 +1,4 @@
-package com.w3gdata
+package com.w3gdata.parser
 
 import jdk.nashorn.internal.ir.annotations.Immutable
 

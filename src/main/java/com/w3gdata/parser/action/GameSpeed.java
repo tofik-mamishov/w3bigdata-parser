@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class GameSpeed implements Action {
 
@@ -28,7 +28,7 @@ public class GameSpeed implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
-        return new GameSpeed(buf.readByte());
+    public Action deserialize(ByteReader buf) {
+        return new GameSpeed(buf.nextByte());
     }
 }

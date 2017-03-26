@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class UselessAction implements Action {
 
@@ -12,8 +12,8 @@ public class UselessAction implements Action {
         this.size = size;
     }
 
-    public UselessAction skip(ByteBuffer buf) {
-        buf.increment(getSize());
+    public UselessAction skip(ByteReader buf) {
+        buf.forward(getSize());
         return this;
     }
 
@@ -23,7 +23,7 @@ public class UselessAction implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         return skip(buf);
     }
 

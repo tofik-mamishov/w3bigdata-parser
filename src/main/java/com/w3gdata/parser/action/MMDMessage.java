@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 /**
  * - Messages can be identified by the surrounding pattern: kMMD.Dat[null]val:[decimal-number][null][message contents][null][dword]"
@@ -19,12 +19,12 @@ public class MMDMessage implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         MMDMessage block = new MMDMessage();
-        block.name = buf.readNullTerminatedString();
-        block.checksum = buf.readNullTerminatedString();
-        block.secondChecksum = buf.readNullTerminatedString();
-        block.weakChecksum = buf.readDWord();
+        block.name = buf.nextNullTerminatedString();
+        block.checksum = buf.nextNullTerminatedString();
+        block.secondChecksum = buf.nextNullTerminatedString();
+        block.weakChecksum = buf.nextDWord();
         return block;
     }
 }

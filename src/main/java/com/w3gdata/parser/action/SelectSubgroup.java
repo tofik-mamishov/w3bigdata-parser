@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class SelectSubgroup implements Action {
     public static final int ID = 0x19;
@@ -21,7 +21,7 @@ public class SelectSubgroup implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
-        return new SelectSubgroup(buf.readByte());
+    public Action deserialize(ByteReader buf) {
+        return new SelectSubgroup(buf.nextByte());
     }
 }

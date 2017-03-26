@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class CancelHeroRevival implements Action {
     public static final int ID = 0x1D;
@@ -15,9 +15,9 @@ public class CancelHeroRevival implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         CancelHeroRevival cancelHeroRevival = new CancelHeroRevival();
-        cancelHeroRevival.unitPair = new ObjPair(buf.readDWord(), buf.readDWord());
+        cancelHeroRevival.unitPair = new ObjPair(buf.nextDWord(), buf.nextDWord());
         return cancelHeroRevival;
     }
 }

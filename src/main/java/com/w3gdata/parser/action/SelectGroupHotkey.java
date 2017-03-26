@@ -1,6 +1,6 @@
 package com.w3gdata.parser.action;
 
-import com.w3gdata.util.ByteBuffer;
+import com.w3gdata.util.ByteReader;
 
 public class SelectGroupHotkey implements Action {
     public static final int ID = 0x18;
@@ -15,10 +15,10 @@ public class SelectGroupHotkey implements Action {
     }
 
     @Override
-    public Action deserialize(ByteBuffer buf) {
+    public Action deserialize(ByteReader buf) {
         SelectGroupHotkey selectGroupHotkey = new SelectGroupHotkey();
-        selectGroupHotkey.groupNumber = buf.readByte();
-        selectGroupHotkey.unknown = buf.readByte();
+        selectGroupHotkey.groupNumber = buf.nextByte();
+        selectGroupHotkey.unknown = buf.nextByte();
         return selectGroupHotkey;
     }
 }
