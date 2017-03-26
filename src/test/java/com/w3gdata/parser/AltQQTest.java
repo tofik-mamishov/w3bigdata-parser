@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class AltQQTest extends ParsingTest {
@@ -19,7 +20,8 @@ public class AltQQTest extends ParsingTest {
     public void expectHavingPauseAction() throws Exception {
         List<Action> allActions = w3gInfo.getAllActionBlocks();
         Optional<Action> pauseGame = allActions.stream().filter(a -> a instanceof PauseGame).findFirst();
-        assertTrue(pauseGame.isPresent());
+
+        assertThat(pauseGame).isPresent();
     }
 
 
