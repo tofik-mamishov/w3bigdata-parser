@@ -7,9 +7,9 @@ class DataBlock {
     public DataBlockHeader header
     public byte[] decompressed
 
-    DataBlock(DataBlockHeader header, byte[] decompressed) {
+    DataBlock(DataBlockHeader header) {
         this.header = header
-        this.decompressed = decompressed
+        this.decompressed = new byte[header.decompressedSize]
     }
 
     DataBlockHeader getHeader() {

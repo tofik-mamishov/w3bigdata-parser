@@ -4,13 +4,10 @@ import com.google.common.primitives.Bytes;
 import com.jcraft.jzlib.Inflater;
 import com.jcraft.jzlib.JZlib;
 import com.w3gdata.util.ByteReader;
-import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.ToIntFunction;
-import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
 import static com.w3gdata.parser.DataBlockUtils.checkErrors;
@@ -40,8 +37,7 @@ public class DataBlockReader {
 
     private DataBlock nextDataBlock() throws DataFormatException {
         DataBlockHeader header = new DataBlockHeader(reader);
-        byte[] decompressed = new byte[header.decompressedSize];
-        DataBlock block = new DataBlock(header, decompressed);
+        DataBlock block = new DataBlock(header);
         inflate(block);
         reader.forward(block.header.size);
         return block;
