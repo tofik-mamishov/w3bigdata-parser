@@ -2,6 +2,7 @@ package com.w3gdata;
 
 import com.google.common.collect.FluentIterable;
 import com.w3gdata.actionblock.ActionBlock;
+import java.util.Collections;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -43,7 +44,7 @@ public class W3gInfo {
     }
 
     public List<ActionBlock> getAllActionBlocks() {
-        FluentIterable.from(timeSlotBlocks).
+        return Collections.emptyList();
     }
 
     public List<PlayerRecord> getPlayerRecords() {
