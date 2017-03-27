@@ -1,13 +1,10 @@
 package com.w3gdata.parser
 
 import com.w3gdata.util.ByteReader
-import com.w3gdata.util.ByteUtils
 import com.w3gdata.util.EnumUtils
 import com.w3gdata.util.Valued
 import groovy.transform.Canonical
 import groovy.transform.TupleConstructor
-import org.apache.commons.lang.BitField
-
 
 @Canonical
 class GameSettings {

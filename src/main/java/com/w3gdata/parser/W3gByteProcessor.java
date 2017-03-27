@@ -1,7 +1,6 @@
 package com.w3gdata.parser;
 
 import com.w3gdata.util.ByteReader;
-import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
 import java.util.zip.DataFormatException;
@@ -25,7 +24,7 @@ public class W3gByteProcessor {
         data.gameSettings = new GameSettings(dataReader);
 
         data.playerCount = dataReader.nextDWord();
-        data.gameType = dataReader.nextDWord();
+        data.gameType = new GameType(dataReader);
         data.languageId = dataReader.nextDWord();
         readPlayerList();
         readGameStartRecord();
@@ -34,33 +33,11 @@ public class W3gByteProcessor {
     }
 
     private void readGameStartRecord() {
-        data.gameStartRecord.id = dataReader.nextByte();
-        dataReader.forward(2);
-        int numberOfSlots = dataReader.nextByte();
-        for (int i = 0; i < numberOfSlots; i++) {
-            data.gameStartRecord.slots.add(readSlot());
-        }
-        dataReader.forward(4);
-        data.gameStartRecord.mode = dataReader.nextByte();
-        data.gameStartRecord.startSpotCount = dataReader.nextByte();
-    }
-
-    private GameStartRecord.SlotRecord readSlot() {
-        GameStartRecord.SlotRecord slot = new GameStartRecord.SlotRecord();
-        slot.id = dataReader.nextByte();
-        slot.mapDownloadPercent = dataReader.nextByte();
-        slot.status = dataReader.nextByte();
-        slot.computerPlayerFlag = dataReader.nextByte();
-        slot.teamNumber = dataReader.nextByte();
-        slot.color = dataReader.nextByte();
-        slot.playerRaceFlags = dataReader.nextByte();
-        slot.computerAIStrength = dataReader.nextByte();
-        slot.handicap = dataReader.nextByte();
-        return slot;
+        data.gameStartRecord = new GameStartRecord(dataReader);
     }
 
     private void readPlayerList() {
-        while (dataReader.peek() == 0x16) {
+        while (dataReader.peek() == PlayerRecord.ADDITIONAL_PLAYER_RECORD_ID) {
             data.getPlayerRecords().add(readPlayerRecord());
             dataReader.forward(4);
         }
@@ -68,8 +45,7 @@ public class W3gByteProcessor {
 
     private PlayerRecord readPlayerRecord() {
         logger.info("Reading player record...");
-        PlayerRecord playerRecord = new PlayerRecord(dataReader);
-        return playerRecord;
+        return new PlayerRecord(dataReader);
     }
 
     private void readGameSettings() {

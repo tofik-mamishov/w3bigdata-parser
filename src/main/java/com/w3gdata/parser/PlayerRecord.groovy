@@ -8,29 +8,13 @@ import groovy.transform.TupleConstructor
 
 @Canonical
 class PlayerRecord {
+    public static final int ADDITIONAL_PLAYER_RECORD_ID = 0x16
     public static final int POSSIBLE_RECORD_ID = 0x00000110
     public PlayerType type
     public byte playerId
     public String name
     public GameType gameType
     public Race race
-
-    @TupleConstructor
-    static enum Race implements Valued {
-        Human(0x01),
-        Orc(0x02),
-        NightElf(0x04),
-        Undead(0x08),
-        Daemon(0x10),
-        Random(0x20),
-        SelectableOrFixed(0x40)
-
-        int value
-
-        static Race of(int value) {
-            EnumUtils.of(Race.class, value)
-        }
-    }
 
     @TupleConstructor
     static enum PlayerType implements Valued {
@@ -68,7 +52,7 @@ class PlayerRecord {
         gameType = GameType.of(reader.nextByteAsInt())
         reader.forward(gameType.size)
         if (gameType == GameType.Ladder) {
-            race = Race.of(reader.nextDWord())
+            race = new Race(reader.nextDWord())
         }
     }
 }

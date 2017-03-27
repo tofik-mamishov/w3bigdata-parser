@@ -6,6 +6,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.util.streamex.StreamEx;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ public class W3gInfo {
     public ReplayInformation replayInformation;
     public PlayerRecord host;
     public GameSettings gameSettings;
-    public GameStartRecord gameStartRecord = new GameStartRecord();
+    public GameStartRecord gameStartRecord;
     public List<LeaveGameRecord> leaveGameRecords;
     public List<ForcedGameEndCountdownRecord> forcedGameEndCountdownRecords;
     public List<TimeSlot> timeSlots;
@@ -30,7 +31,7 @@ public class W3gInfo {
     private String matchLength;
     public String gameName;
     public int playerCount;
-    public int gameType;
+    public GameType gameType;
     public int languageId;
 
     public W3gInfo() {
@@ -46,6 +47,10 @@ public class W3gInfo {
                 .flatMap(t -> t.getCommandDataBlocks().values().stream())
                 .flatMap(cd -> cd.getActionBlocks().values().stream())
                 .collect(Collectors.toList());
+    }
+
+    public StreamEx<Action> actionBlocks() {
+        return StreamEx.of(getAllActionBlocks());
     }
 
     public List<PlayerRecord> getPlayerRecords() {
