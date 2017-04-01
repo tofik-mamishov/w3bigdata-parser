@@ -1,9 +1,7 @@
 package com.w3gdata.parser;
 
-import com.w3gdata.parser.action.PauseGame;
+import com.w3gdata.parser.action.ActionType;
 import org.junit.Test;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,9 +13,7 @@ public class AltQQTest extends ParsingTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-        Optional<PauseGame> pauseGame = w3gInfo.actionBlocks().select(PauseGame.class).findFirst();
-
-        assertThat(pauseGame).isPresent();
+        assertThat(w3gInfo.actionTypes().has(ActionType.PauseGame)).isTrue();
     }
 
 

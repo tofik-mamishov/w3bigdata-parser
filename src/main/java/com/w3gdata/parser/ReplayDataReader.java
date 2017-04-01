@@ -4,19 +4,6 @@ import com.w3gdata.util.ByteReader;
 import com.w3gdata.util.ByteUtils;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static com.w3gdata.parser.ReplayDataFormat.FORCED_GAME_END_COUNTDOWN;
-import static com.w3gdata.parser.ReplayDataFormat.LEAVE_GAME;
-import static com.w3gdata.parser.ReplayDataFormat.PLAYER_CHAT_MESSAGE;
-import static com.w3gdata.parser.ReplayDataFormat.TIME_SLOT_BLOCK_NEW;
-
 public class ReplayDataReader {
 
     private static final Logger logger = Logger.getLogger(ReplayDataReader.class);
@@ -33,7 +20,7 @@ public class ReplayDataReader {
         try {
             while (reader.hasMore()) {
                 int replayDataId = reader.nextByte();
-                ReplayDataFormat.of(replayDataId).ifPresent( format -> {
+                ReplayDataFormat.of(replayDataId).ifPresent(format -> {
                     if (format.isKnown) {
                         processBlockByFormat(format);
                     } else {

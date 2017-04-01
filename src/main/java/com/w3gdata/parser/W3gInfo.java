@@ -1,6 +1,7 @@
 package com.w3gdata.parser;
 
 import com.w3gdata.parser.action.Action;
+import com.w3gdata.parser.action.ActionType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -10,6 +11,7 @@ import javax.util.streamex.StreamEx;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class W3gInfo {
 
@@ -51,6 +53,12 @@ public class W3gInfo {
 
     public StreamEx<Action> actionBlocks() {
         return StreamEx.of(getAllActionBlocks());
+    }
+
+    public StreamEx<ActionType> actionTypes() {
+        return StreamEx.of(timeSlots)
+                .flatMap(t -> t.commandDataBlocks.values().stream())
+                .flatMap(cd -> cd.actionBlocks.keys().stream());
     }
 
     public List<PlayerRecord> getPlayerRecords() {

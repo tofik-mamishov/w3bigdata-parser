@@ -1,11 +1,9 @@
 package com.w3gdata.parser;
 
-import com.google.common.collect.ImmutableList;
-import com.w3gdata.parser.action.Action;
-import com.w3gdata.parser.action.Actions;
+import com.w3gdata.parser.action.ActionType;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShortReplayTest extends ParsingTest {
     public ShortReplayTest() {
@@ -14,9 +12,6 @@ public class ShortReplayTest extends ParsingTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-        ImmutableList<Action> actions = this.actions.get(Actions.PAUSE_GAME);
-        assertFalse(actions.isEmpty());
+        assertThat(w3gInfo.actionTypes().has(ActionType.PauseGame)).isTrue();
     }
-
-
 }

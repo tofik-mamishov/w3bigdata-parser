@@ -20,11 +20,10 @@ class TimeSlot {
 
     private Multimap<Byte, Command> readCommandDataBlocks(ByteReader reader) {
         int limit = reader.offset() + n - 2
-        Multimap<Byte, Command> commands = ArrayListMultimap.create()
-        while (reader.offset() < limit) {
-            Command command = new Command(reader)
-            commands.put(command.playerId, command)
+        Multimap<Byte, Command> playerCommands = ArrayListMultimap.create()
+        reader.listOfUntil(limit, { it -> new Command(it)}).each {
+            playerCommands.put(it.playerId, it)
         }
-        return commands
+        return playerCommands
     }
 }

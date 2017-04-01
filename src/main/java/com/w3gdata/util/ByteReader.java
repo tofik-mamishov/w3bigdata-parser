@@ -1,5 +1,9 @@
 package com.w3gdata.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 public class ByteReader {
 
     private final byte[] buf;
@@ -108,5 +112,13 @@ public class ByteReader {
         byte tmp = buf[offset];
         buf[offset] = buf[offset + 1];
         buf[offset + 1] = tmp;
+    }
+
+    public <T> List<T> listOfUntil(long limit, Function<ByteReader, T> readFunction) {
+        List<T> result = new ArrayList<>();
+        while (offset() < limit) {
+            result.add(readFunction.apply(this));
+        }
+        return result;
     }
 }
