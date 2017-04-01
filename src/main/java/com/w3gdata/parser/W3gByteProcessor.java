@@ -10,48 +10,39 @@ public class W3gByteProcessor {
     private static final Logger logger = Logger.getLogger(W3gByteProcessor.class);
 
     private W3gInfo data = new W3gInfo();
-    private ByteReader dataReader;
+    private ByteReader reader;
 
     public W3gInfo process(byte[] buf) throws DataFormatException {
         ByteReader headerReader = new ByteReader(buf, 0);
         data.replayInformation = readHeaders(headerReader);
         DataBlockReader dataBlockReader = new DataBlockReader(headerReader);
 
-        dataReader = new ByteReader(dataBlockReader.nextDataBlocks());
-        data.host = new PlayerRecord(dataReader);
+        reader = new ByteReader(dataBlockReader.nextDataBlocks());
+        data.host = new PlayerRecord(reader);
 
-        data.gameName = dataReader.nextNullTerminatedStringAndForward();
-        data.gameSettings = new GameSettings(dataReader);
+        data.gameName = reader.nextNullTerminatedStringAndForward();
+        data.gameSettings = new GameSettings(reader);
 
-        data.playerCount = dataReader.nextDWord();
-        data.gameType = new GameType(dataReader);
-        data.languageId = dataReader.nextDWord();
+        data.playerCount = reader.nextDWord();
+        data.gameType = new GameType(reader);
+        data.languageId = reader.nextDWord();
         readPlayerList();
-        readGameStartRecord();
+        data.gameStartRecord = new GameStartRecord(reader);
         readReplayData();
         return data;
     }
 
-    private void readGameStartRecord() {
-        data.gameStartRecord = new GameStartRecord(dataReader);
-    }
-
     private void readPlayerList() {
-        while (dataReader.peek() == PlayerRecord.ADDITIONAL_PLAYER_RECORD_ID) {
+        while (reader.peek() == PlayerRecord.ADDITIONAL_PLAYER_RECORD_ID) {
             data.getPlayerRecords().add(readPlayerRecord());
-            dataReader.forward(4);
+            reader.forward(4);
         }
     }
 
     private PlayerRecord readPlayerRecord() {
         logger.info("Reading player record...");
-        return new PlayerRecord(dataReader);
+        return new PlayerRecord(reader);
     }
-
-    private void readGameSettings() {
-        data.gameSettings = new GameSettings(dataReader);
-    }
-
 
     private ReplayInformation readHeaders(ByteReader byteReader) {
         logger.info("Reading header information...");
@@ -64,7 +55,7 @@ public class W3gByteProcessor {
     }
 
     private void readReplayData() {
-        ReplayDataReader reader = new ReplayDataReader(data, dataReader);
+        ReplayDataReader reader = new ReplayDataReader(data, this.reader);
         reader.read();
     }
 }

@@ -44,8 +44,8 @@ public class W3gInfo {
 
     public List<Action> getAllActionBlocks() {
         return timeSlots.stream()
-                .flatMap(t -> t.getCommandDataBlocks().values().stream())
-                .flatMap(cd -> cd.getActionBlocks().values().stream())
+                .flatMap(t -> t.commandDataBlocks.values().stream())
+                .flatMap(cd -> cd.actionBlocks.values().stream())
                 .collect(Collectors.toList());
     }
 
