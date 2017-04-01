@@ -16,17 +16,6 @@ class GameSettings {
     public String creatorName
     public int crc
 
-    @TupleConstructor
-    static enum Speed implements Valued {
-        Slow(0), Normal(1), Fast(2)
-
-        int value
-
-        static Speed of(int value) {
-            EnumUtils.of(Speed.class, value)
-        }
-    }
-
     static enum Visibility {
         HideTerrain {
             boolean is(BigInteger bitField) {

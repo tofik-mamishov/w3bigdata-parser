@@ -16,7 +16,7 @@ public class NWGParsingTest extends ParsingTest {
 
     @Test
     public void expectHavingPauseAction() throws Exception {
-        ImmutableList<Action> actions = this.actions.get(ActionType.ASSIGN_GROUP_HOTKEY);
+        ImmutableList<Action> actions = this.actions.get(ActionType.AssignGroupHotkey);
         assertFalse(actions.isEmpty());
     }
 }
